@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+/* Hiding Y-Scrollbar */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hiding Y-Scrollbar for IE, Edge, and Firefox */
+html {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
