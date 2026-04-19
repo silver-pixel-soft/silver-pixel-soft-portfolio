@@ -5,7 +5,7 @@ const useScrollToSection = () => {
   const navigate = useNavigate();
 
   const scrollToSection = useCallback(
-    (sectionId) => {
+    (sectionId: string) => {
       navigate("/");
       setTimeout(() => {
         const element = document.getElementById(sectionId);
