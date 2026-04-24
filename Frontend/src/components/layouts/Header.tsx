@@ -1,6 +1,6 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import useScrollToSection from "../../hooks/useScrollToSection";
-import { MonitorPlay, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Button } from "../ui/Button";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -11,8 +11,12 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLElement>(null);
+  const tl = useRef<gsap.core.Timeline | null>(null);
   const isMobileMenuOpenRef = useRef(isMobileMenuOpen);
-  isMobileMenuOpenRef.current = isMobileMenuOpen;
+  
+  useEffect(() => {
+    isMobileMenuOpenRef.current = isMobileMenuOpen;
+  }, [isMobileMenuOpen]);
 
   const navItems = [
     { name: "Home", id: "home" },
@@ -28,26 +32,30 @@ const Header = () => {
   };
 
   useGSAP(() => {
-    if (menuRef.current) {
-      if (isMobileMenuOpen) {
-        gsap.to(menuRef.current, {
-          y: 0,
-          opacity: 1,
-          duration: 0.4,
-          ease: "power3.out",
-          display: "block",
-        });
-      } else {
-        gsap.to(menuRef.current, {
-          y: -20,
-          opacity: 0,
-          duration: 0.3,
-          ease: "power3.in",
-          onComplete: () => {
-            gsap.set(menuRef.current, { display: "none" });
-          }
-        });
-      }
+    if (!menuRef.current) return;
+    
+    gsap.set(menuRef.current, { xPercent: 100, opacity: 0 });
+
+    tl.current = gsap.timeline({ paused: true })
+      .to(menuRef.current, {
+        xPercent: 0,
+        opacity: 1,
+        duration: 0.5,
+        ease: "power4.out",
+        display: "flex",
+      })
+      .from(
+        gsap.utils.toArray('.mobile-nav-link', menuRef.current),
+        { y: 30, opacity: 0, duration: 0.4, stagger: 0.1, ease: "power3.out" },
+        "-=0.2"
+      );
+  }, { scope: menuRef });
+
+  useGSAP(() => {
+    if (isMobileMenuOpen) {
+      tl.current?.play();
+    } else {
+      tl.current?.reverse();
     }
   }, [isMobileMenuOpen]);
 
@@ -76,14 +84,14 @@ const Header = () => {
   }, []);
 
   return (
-    <header ref={headerRef} className="sticky top-0 z-50 w-full border-b border-white/5 bg-black/50 backdrop-blur-md">
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-20">
+    <>
+      <header ref={headerRef} className="sticky top-0 z-50 w-full border-b border-white/5 bg-black/50 backdrop-blur-md">
+        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-20">
         <div 
           className="flex cursor-pointer items-center gap-2"
           onClick={() => scrollToSection("home")}
         >
-          <MonitorPlay className="h-8 w-8 text-sky-500" />
-          <span className="text-xl font-bold tracking-tight text-white">Silver Pixel Soft</span>
+          <h1 className="text-xl font-bold tracking-tight text-white">Silver Pixel Soft</h1>
         </div>
 
         {/* Desktop Nav */}
@@ -115,33 +123,49 @@ const Header = () => {
         </button>
       </div>
 
+      </header>
+
       {/* Mobile Nav */}
       <div 
         ref={menuRef}
-        style={{ display: 'none', opacity: 0, transform: 'translateY(-20px)' }}
-        className="absolute left-0 top-20 w-full border-b border-white/5 bg-neutral-950/95 px-6 py-6 backdrop-blur-xl md:hidden"
+        style={{ display: 'none', opacity: 0 }}
+        className="fixed top-0 right-0 z-[100] h-screen w-full sm:w-[400px] border-l border-white/5 bg-neutral-950/95 backdrop-blur-2xl md:hidden flex-col"
       >
-        <ul className="flex flex-col gap-6 text-base font-medium text-neutral-300">
-          {navItems.map((item) => (
-            <li 
-              key={item.id}
-              className="cursor-pointer transition-colors hover:text-sky-400"
-              onClick={() => handleNavClick(item.id)}
-            >
-              {item.name}
+        {/* Close Button */}
+        <div className="flex h-20 items-center justify-end px-6">
+          <button 
+            aria-label="Close Navigation Menu"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-neutral-300 transition-colors hover:bg-white/10 hover:text-white"
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        {/* Nav Links */}
+        <div className="flex flex-1 flex-col justify-center px-12 pb-20">
+          <ul className="flex flex-col gap-8 text-4xl font-bold tracking-tight text-white">
+            {navItems.map((item) => (
+              <li 
+                key={item.id}
+                className="mobile-nav-link cursor-pointer transition-colors hover:text-sky-400"
+                onClick={() => handleNavClick(item.id)}
+              >
+                {item.name}
+              </li>
+            ))}
+            <li className="mobile-nav-link pt-4">
+              <Button 
+                className="w-full text-lg py-4"
+                onClick={() => handleNavClick("contact")}
+              >
+                Get Started
+              </Button>
             </li>
-          ))}
-          <li className="pt-4">
-            <Button 
-              className="w-full text-base py-3"
-              onClick={() => handleNavClick("contact")}
-            >
-              Get Started
-            </Button>
-          </li>
-        </ul>
+          </ul>
+        </div>
       </div>
-    </header>
+    </>
   );
 };
 

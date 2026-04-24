@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Home } from "./pages/index.ts"
 import { Header, Footer } from './components/layouts/index.ts'
 import Lenis from 'lenis';
@@ -6,10 +6,14 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
 import { CustomCursor } from './components/ui/CustomCursor.tsx';
+import { Preloader } from './components/ui/Preloader.tsx';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const App = () => {
+  const [isLoading, setIsLoading] = useState(true);
+  const lenisRef = useRef<Lenis | null>(null);
+
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.2,
@@ -22,6 +26,13 @@ const App = () => {
       smoothTouch: false,
       touchMultiplier: 2,
     })
+    
+    lenisRef.current = lenis;
+
+    // Stop scrolling initially while loading
+    if (isLoading) {
+      lenis.stop();
+    }
 
     lenis.on('scroll', ScrollTrigger.update)
 
@@ -36,8 +47,15 @@ const App = () => {
     }
   }, [])
 
+  useEffect(() => {
+    if (!isLoading && lenisRef.current) {
+      lenisRef.current.start();
+    }
+  }, [isLoading]);
+
   return (
     <div>
+      {isLoading && <Preloader onComplete={() => setIsLoading(false)} />}
       <CustomCursor />
       <Header />
       <Home />
