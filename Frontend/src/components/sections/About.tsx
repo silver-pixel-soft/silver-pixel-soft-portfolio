@@ -52,7 +52,7 @@ const About = () => {
           {/* Floating Stats Card */}
           <div className="absolute -bottom-8 -right-8 bg-neutral-900 border border-white/10 p-6 rounded-2xl shadow-2xl backdrop-blur-xl hidden md:block">
             <div className="flex items-center gap-4">
-              <div className="text-4xl font-black text-sky-400">10+</div>
+              <div className="text-4xl font-black text-sky-400">5+</div>
               <div className="text-sm text-neutral-400 font-medium leading-tight">
                 Years of <br /> Experience
               </div>
@@ -82,10 +82,6 @@ const About = () => {
               </li>
             ))}
           </ul>
-          
-          <Button variant="secondary" size="lg">
-            Discover Our Story
-          </Button>
         </div>
       </div>
     </section>
