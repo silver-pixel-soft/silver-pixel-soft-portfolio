@@ -17,7 +17,7 @@ const Footer = () => {
           </p>
           <div className="mt-6 flex flex-wrap items-center gap-4 text-neutral-400 text-sm">
             <Link to="https://x.com/Silver59063Soft" target="_blank" rel="noopener noreferrer" className="hover:text-sky-400 transition-colors">X (Twitter)</Link>
-            <Link to="#" target="_blank" rel="noopener noreferrer" className="hover:text-sky-400 transition-colors">GitHub</Link>
+            <Link to="https://github.com/silver-pixel-soft" target="_blank" rel="noopener noreferrer" className="hover:text-sky-400 transition-colors">GitHub</Link>
             <Link to="https://www.linkedin.com/in/silver-pixel-soft-undefined-577887405/" target="_blank" rel="noopener noreferrer" className="hover:text-sky-400 transition-colors">LinkedIn</Link>
             <Link to="https://www.instagram.com/silverpixelsoft?igsh=MWQ0NDM3a2RxMGJ2MA%3D%3D&utm_source=ig_contact_invite" target="_blank" rel="noopener noreferrer" className="hover:text-sky-400 transition-colors">Instagram</Link>
             <Link to="https://www.facebook.com/share/1CWx32CcH4/" target="_blank" rel="noopener noreferrer" className="hover:text-sky-400 transition-colors">Facebook</Link>
