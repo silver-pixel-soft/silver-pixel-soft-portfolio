@@ -58,7 +58,7 @@ const Hero = () => {
 
           <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4">
             <Button
-              onClick={() => scrollToSection("work")}
+              onClick={() => scrollToSection("service")}
               size="lg"
               className="w-full sm:w-auto"
             >

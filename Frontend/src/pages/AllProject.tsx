@@ -1,16 +1,16 @@
-import { useRef } from "react";
-import { ExternalLink, FileCodeCorner } from "lucide-react";
-import { SectionHeading } from "../ui/SectionHeading";
-import { Button } from "../ui/Button";
+import { useRef, useEffect } from "react";
+import { ExternalLink, FileCodeCorner, ArrowLeft } from "lucide-react";
+import { SectionHeading } from "../components/ui/SectionHeading";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { useNavigate } from "react-router-dom";
 
-// Image import
-import portfolioImage from "../../assets/Portfolio.png";
-import lioImage from "../../assets/Lio.png";
-import khabriImage from "../../assets/Khabri.png";
-import chatBotImage from "../../assets/ChatBot.png";
+// Image import 
+import portfolioImage from "../assets/Portfolio.png";
+import lioImage from "../assets/Lio.png";
+import khabriImage from "../assets/Khabri.png";
+import chatBotImage from "../assets/ChatBot.png";
+import { CustomCursor } from "../components/ui/CustomCursor";
 
 const projects = [
   {
@@ -75,37 +75,51 @@ const projects = [
   }
 ];
 
-const Work = () => {
-  const containerRef = useRef<HTMLElement>(null);
+const AllProject = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
   const projectsRef = useRef<HTMLDivElement[]>([]);
+  const headingRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
 
   useGSAP(() => {
-    gsap.from(projectsRef.current, {
-      scrollTrigger: {
-        trigger: containerRef.current,
-        start: "top 80%",
-      },
+    const tl = gsap.timeline();
+    
+    tl.from(headingRef.current, {
+      y: 30,
+      opacity: 0,
+      duration: 0.8,
+      ease: "power3.out",
+    })
+    .from(projectsRef.current, {
       y: 50,
       opacity: 0,
       duration: 0.8,
       stagger: 0.15,
       ease: "power3.out",
-    });
+    }, "-=0.4");
   }, { scope: containerRef });
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
-    <section id="work" ref={containerRef} className="py-24 px-6 lg:px-20 mx-auto max-w-7xl">
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+    <div ref={containerRef} className="min-h-screen pt-32 pb-24 px-6 lg:px-20 mx-auto max-w-7xl">
+      <CustomCursor />
+      <div ref={headingRef} className="flex flex-col mb-16 gap-6">
+        <button 
+          onClick={() => navigate(-1)} 
+          className="flex items-center gap-2 text-sky-400 hover:text-sky-300 transition-colors w-fit mb-4 group font-medium"
+        >
+          <ArrowLeft className="w-5 h-5 transform group-hover:-translate-x-1 transition-transform" />
+          Back to Home
+        </button>
         <SectionHeading
           align="left"
-          subtitle="Our Work"
-          title="Featured Case Studies"
+          subtitle="Portfolio"
+          title="All Projects"
           className="mb-0"
         />
-        <Button onClick={() => { navigate('/all-projects') }} variant="secondary" size="lg" className="whitespace-nowrap">
-          View All Projects
-        </Button>
       </div>
 
       <div className="grid md:grid-cols-2 gap-8">
@@ -135,14 +149,14 @@ const Work = () => {
               <div className="flex gap-4">
                 <button
                   onClick={() => { window.open(project.links[0].url, '_blank') }}
-                  aria-label={`View ${project.title} project`} className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white opacity-0 transform translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hover:bg-sky-500"
+                  aria-label={`View ${project.title} project source`} className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white opacity-0 transform translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hover:bg-sky-500"
                   title="Source Code"
                 >
                   <FileCodeCorner className="w-5 h-5" />
                 </button>
                 <button
                   onClick={() => { window.open(project.links[1].url, '_blank') }}
-                  aria-label={`View ${project.title} project`} className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white opacity-0 transform translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hover:bg-sky-500"
+                  aria-label={`View ${project.title} project demo`} className="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white opacity-0 transform translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 hover:bg-sky-500"
                   title="Live Demo"
                 >
                   <ExternalLink className="w-5 h-5" />
@@ -152,8 +166,8 @@ const Work = () => {
           </div>
         ))}
       </div>
-    </section>
+    </div>
   )
 }
 
-export default Work
+export default AllProject

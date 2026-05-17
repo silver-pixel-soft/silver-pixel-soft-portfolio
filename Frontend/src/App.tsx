@@ -11,7 +11,9 @@ import { Preloader } from './components/ui/Preloader.tsx';
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const App = () => {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(() => {
+    return !sessionStorage.getItem('hasVisited');
+  });
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
@@ -26,7 +28,7 @@ const App = () => {
       smoothTouch: false,
       touchMultiplier: 2,
     })
-    
+
     lenisRef.current = lenis;
 
     // Stop scrolling initially while loading
@@ -36,7 +38,7 @@ const App = () => {
 
     lenis.on('scroll', ScrollTrigger.update)
 
-    gsap.ticker.add((time)=>{
+    gsap.ticker.add((time) => {
       lenis.raf(time * 1000)
     })
 
@@ -48,8 +50,11 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    if (!isLoading && lenisRef.current) {
-      lenisRef.current.start();
+    if (!isLoading) {
+      sessionStorage.setItem('hasVisited', 'true');
+      if (lenisRef.current) {
+        lenisRef.current.start();
+      }
     }
   }, [isLoading]);
 

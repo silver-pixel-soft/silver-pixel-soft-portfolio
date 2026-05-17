@@ -5,7 +5,8 @@ import App from './App.tsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import {
   PrivacyPolicy,
-  TermsOfService
+  TermsOfService,
+  AllProject
 } from './pages/index.ts'
 
 const router = createBrowserRouter([
@@ -16,8 +17,12 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <App />,
-      }
+      },
     ],
+  },
+  {
+    path: '/all-projects',
+    element: <AllProject />,
   },
   {
     path: '/privacy-policy',
