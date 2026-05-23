@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #0ea5e9;
+  --color-primary-dark: #0284c7;
+  --color-secondary: #8b5cf6;
+  --color-dark-bg: #0a0a0a;
+  --color-card-bg: #171717;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-dark-bg);
+    color: #f8fafc;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+}
+
+/* Hiding Y-Scrollbar */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hiding Y-Scrollbar for IE, Edge, and Firefox */
+html {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+}
+
+/* Hide default cursor on desktop since we have Custom Cursor */
+@media (min-width: 768px) and (hover: hover) and (pointer: fine) {
+  * {
+    cursor: none !important;
+  }
+}
