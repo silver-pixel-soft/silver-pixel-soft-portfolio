@@ -1,7 +1,6 @@
 import { useRef } from "react";
 import { CheckCircle2 } from "lucide-react";
 import { SectionHeading } from "../ui/SectionHeading";
-import { Button } from "../ui/Button";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 
