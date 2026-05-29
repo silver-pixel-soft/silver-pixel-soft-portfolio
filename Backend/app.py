@@ -1,5 +1,7 @@
 from flask import Flask, jsonify, request
 from dotenv import load_dotenv
+from flask_mail import Mail, Message
+from utils import email_template
 import os
 
 app = Flask(__name__)
@@ -9,6 +11,17 @@ load_dotenv()
 API_VERSION = os.getenv("API_VERSION") or "1.0.0"
 PORT = os.getenv("PORT") or 5000
 DEBUG = os.getenv("DEBUG") or False
+
+# =================== Email configs ===================
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USERNAME'] = os.getenv("MAIL_USERNAME")
+app.config['MAIL_PASSWORD'] = os.getenv("MAIL_PASSWORD")
+app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_USERNAME')
+
+mail = Mail(app)
 
 # =================== Health check route ===================
 @app.route('/')
@@ -41,7 +54,24 @@ def contact():
     }), 400
 
   # =================== Send the data to the email ===================
-  # send_email(first_name, last_name, email, service_needed, budget, project_description)
+  try:
+    # ================ Requesting the HTML template =================
+    template = email_template.email_template(first_name, last_name, email, service_needed, budget, project_description)
+
+    # ================ Sending the email =================
+    msg = Message(
+      f"Contect from Silver Pixel Soft: {first_name} {last_name}",
+      recipients=[os.getenv("RECIPITENT_USERNAME")],
+      html = template
+    )
+    mail.send(msg)
+  except Exception as e:
+    return jsonify({
+      "status": "error",
+      "message": "Failed to send email",
+      "version": API_VERSION,
+      "data": None
+    }), 500
   
 
   return jsonify({
@@ -61,4 +91,3 @@ def contact():
 # =================== Run the app ===================
 if __name__ == '__main__':
   app.run(host='0.0.0.0', port=PORT, debug=DEBUG)
- 
