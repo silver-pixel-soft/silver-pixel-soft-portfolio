@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 from dotenv import load_dotenv
 from flask_mail import Mail, Message
-from utils import email_template
+from utils import email_template, google_sheet
 import os
 
 app = Flask(__name__)
@@ -73,6 +73,16 @@ def contact():
       "data": None
     }), 500
   
+  # =================== Insert the data to the google sheet ===================
+  try:
+    google_sheet.insert_row([first_name + " " + last_name, email, service_needed, budget, project_description])
+  except Exception as e:
+    return jsonify({
+      "status": "error",
+      "message": "Failed to insert data to the google sheet",
+      "version": API_VERSION,
+      "data": None
+    }), 500
 
   return jsonify({
     "status": "success",
