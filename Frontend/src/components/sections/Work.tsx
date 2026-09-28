@@ -1,5 +1,5 @@
 import { useRef, useState, useMemo } from "react";
-import { ExternalLink, ArrowRight, Code2 } from "lucide-react";
+import { ExternalLink, ArrowRight } from "lucide-react";
 import { GithubIcon } from "../ui/Icons";
 import { SectionHeading } from "../ui/SectionHeading";
 import { Button } from "../ui/Button";
@@ -21,6 +21,7 @@ export interface ProjectItem {
   tags: string[];
   status: string;
   image: string;
+  categoryLabel: string;
   links: {
     name: string;
     url: string;
@@ -36,6 +37,7 @@ export const projectsData: ProjectItem[] = [
     tags: ["React 19", "GSAP", "Tailwind CSS", "Vite"],
     status: "Featured Showcase",
     image: portfolioImage,
+    categoryLabel: "Portfolio",
     links: [
       {
         name: "GitHub",
@@ -55,6 +57,7 @@ export const projectsData: ProjectItem[] = [
     tags: ["React", "Node.js", "Analytics", "REST API"],
     status: "Active SaaS",
     image: lioImage,
+    categoryLabel: "Lio",
     links: [
       {
         name: "GitHub",
@@ -74,6 +77,7 @@ export const projectsData: ProjectItem[] = [
     tags: ["React", "News API", "Tailwind", "Responsive"],
     status: "Live App",
     image: khabriImage,
+    categoryLabel: "Khabri",
     links: [
       {
         name: "GitHub",
@@ -93,6 +97,7 @@ export const projectsData: ProjectItem[] = [
     tags: ["AI / LLM", "JavaScript", "NLP", "API Integration"],
     status: "AI Model Deployed",
     image: chatBotImage,
+    categoryLabel: "Chat Bot",
     links: [
       {
         name: "GitHub",
@@ -159,11 +164,10 @@ const Work = () => {
           <button
             key={cat}
             onClick={() => setActiveFilter(cat)}
-            className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all ${
-              activeFilter === cat
+            className={`px-4 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all ${activeFilter === cat
                 ? "bg-sky-500 text-white shadow-lg shadow-sky-500/25"
                 : "bg-white/[0.04] text-neutral-400 hover:text-white hover:bg-white/[0.08] border border-white/[0.06]"
-            }`}
+              }`}
           >
             {cat}
           </button>
