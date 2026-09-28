@@ -11,12 +11,12 @@ export const CustomCursor = () => {
     const follower = followerRef.current;
 
     if (!cursor || !follower) return;
-    
-    // Follower has a slight spring-like drag
-    const xToFollower = gsap.quickTo(follower, 'x', { duration: 0.3, ease: 'power3' });
-    const yToFollower = gsap.quickTo(follower, 'y', { duration: 0.3, ease: 'power3' });
 
-    // Explicitly hide elements via GSAP to ensure no phantom rendering
+    // Follower has a slight spring-like drag
+    const xToFollower = gsap.quickTo(follower, 'x', { duration: 0.35, ease: 'power3' });
+    const yToFollower = gsap.quickTo(follower, 'y', { duration: 0.35, ease: 'power3' });
+
+    // Start hidden
     gsap.set([cursor, follower], { autoAlpha: 0 });
 
     let isHovering = false;
@@ -25,36 +25,36 @@ export const CustomCursor = () => {
     const mouseMove = (e: MouseEvent) => {
       if (!isVisible) {
         isVisible = true;
-        gsap.to([cursor, follower], { autoAlpha: 1, duration: 0.2 });
+        gsap.to([cursor, follower], { autoAlpha: 1, duration: 0.25 });
       }
 
       // Core cursor snaps instantly
       gsap.set(cursor, { x: e.clientX, y: e.clientY });
-      
+
       // Follower follows with quickTo tween
       xToFollower(e.clientX);
       yToFollower(e.clientY);
-      
+
       const target = e.target as HTMLElement;
       const isInteractive = target.closest('a, button, input, textarea, [role="button"], .group');
-      
+
       if (isInteractive && !isHovering) {
         isHovering = true;
-        gsap.to(cursor, { scale: 0.5, duration: 0.3, ease: "back.out(1.7)" });
-        gsap.to(follower, { 
-          scale: 2.5, 
-          backgroundColor: 'rgba(14, 165, 233, 0.15)', // sky-500
-          borderColor: 'transparent',
+        gsap.to(cursor, { scale: 0.4, duration: 0.3, ease: "back.out(1.7)" });
+        gsap.to(follower, {
+          scale: 2.8,
+          backgroundColor: 'rgba(124, 58, 237, 0.15)', // violet glow on hover
+          borderColor: 'rgba(167, 139, 250, 0.5)',
           duration: 0.3,
           ease: "back.out(1.5)"
         });
       } else if (!isInteractive && isHovering) {
         isHovering = false;
         gsap.to(cursor, { scale: 1, duration: 0.3, ease: "power2.out" });
-        gsap.to(follower, { 
-          scale: 1, 
-          backgroundColor: 'transparent', 
-          borderColor: 'rgba(14, 165, 233, 0.4)', 
+        gsap.to(follower, {
+          scale: 1,
+          backgroundColor: 'transparent',
+          borderColor: 'rgba(139, 92, 246, 0.45)',
           duration: 0.3,
           ease: "power2.out"
         });
@@ -63,7 +63,7 @@ export const CustomCursor = () => {
 
     const mouseLeave = () => {
       isVisible = false;
-      gsap.to([cursor, follower], { autoAlpha: 0, duration: 0.3 });
+      gsap.to([cursor, follower], { autoAlpha: 0, duration: 0.25 });
     };
 
     window.addEventListener('mousemove', mouseMove);
@@ -77,15 +77,15 @@ export const CustomCursor = () => {
 
   return (
     <>
-      {/* Precision Dot */}
-      <div 
-        ref={cursorRef} 
-        className="fixed top-0 left-0 w-2.5 h-2.5 bg-sky-400 rounded-full pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 hidden md:block shadow-[0_0_10px_rgba(56,189,248,0.8)] mix-blend-screen opacity-0 invisible" 
+      {/* Precision Dot — violet */}
+      <div
+        ref={cursorRef}
+        className="fixed top-0 left-0 w-2.5 h-2.5 bg-violet-400 rounded-full pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 hidden md:block shadow-[0_0_12px_rgba(167,139,250,0.9)] mix-blend-screen opacity-0 invisible"
       />
       {/* Elastic Aura Follower */}
-      <div 
-        ref={followerRef} 
-        className="fixed top-0 left-0 w-10 h-10 border-[1.5px] border-sky-400/40 rounded-full pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 hidden md:block shadow-[0_0_20px_rgba(56,189,248,0.2)] opacity-0 invisible"
+      <div
+        ref={followerRef}
+        className="fixed top-0 left-0 w-10 h-10 border-[1.5px] border-violet-400/40 rounded-full pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 hidden md:block shadow-[0_0_22px_rgba(124,58,237,0.25)] opacity-0 invisible"
       />
     </>
   );

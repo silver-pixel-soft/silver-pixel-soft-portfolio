@@ -17,28 +17,42 @@ export const SectionHeading: React.FC<SectionHeadingProps> = ({
   align = "center",
 }) => {
   return (
-    <div className={cn(
-      "mb-16",
-      align === "center" ? "text-center mx-auto" : "text-left",
-      align === "right" ? "text-right ml-auto" : "",
-      className
-    )}>
-      {subtitle && (
-        <h2 className="text-sm font-semibold text-sky-500 tracking-wider uppercase mb-3">
-          {subtitle}
-        </h2>
+    <div
+      className={cn(
+        "mb-16",
+        align === "center" ? "text-center mx-auto" : "text-left",
+        align === "right" ? "text-right ml-auto" : "",
+        className
       )}
-      <h3 className={cn(
-        "text-3xl md:text-5xl font-bold text-white mb-6",
-        align === "center" ? "" : "max-w-xl"
-      )}>
+    >
+      {subtitle && (
+        <div
+          className={cn(
+            "inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/15 border border-indigo-400/30 text-xs font-semibold text-indigo-300 uppercase tracking-widest mb-5",
+            align === "center" ? "mx-auto" : ""
+          )}
+        >
+          <span className="h-1.5 w-1.5 rounded-full bg-indigo-400 animate-pulse"></span>
+          <span>{subtitle}</span>
+        </div>
+      )}
+
+      <h3
+        className={cn(
+          "text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-[1.15] mb-5",
+          align === "center" ? "max-w-3xl mx-auto" : "max-w-2xl"
+        )}
+      >
         {title}
       </h3>
+
       {description && (
-        <p className={cn(
-          "text-lg text-neutral-400 leading-relaxed",
-          align === "center" ? "max-w-2xl mx-auto" : "max-w-xl"
-        )}>
+        <p
+          className={cn(
+            "text-base sm:text-lg text-slate-300 leading-relaxed font-normal",
+            align === "center" ? "max-w-2xl mx-auto" : "max-w-xl"
+          )}
+        >
           {description}
         </p>
       )}

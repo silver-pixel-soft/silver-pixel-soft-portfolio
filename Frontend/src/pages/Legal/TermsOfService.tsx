@@ -34,7 +34,7 @@ const TermsOfService = () => {
   }, []);
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-black pt-32 pb-24 px-6 lg:px-20 mx-auto w-full relative">
+    <div ref={containerRef} className="min-h-screen bg-[#030712] pt-32 pb-24 px-6 lg:px-20 mx-auto w-full relative">
       <CustomCursor />
       
       <div className="max-w-4xl mx-auto relative z-10">

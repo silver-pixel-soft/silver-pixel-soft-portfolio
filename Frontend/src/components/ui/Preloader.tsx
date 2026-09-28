@@ -89,7 +89,7 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
           <div
             key={i}
             ref={(el) => { columnsRef.current[i] = el; }}
-            className="h-full flex-1 bg-neutral-950"
+            className="h-full flex-1 bg-[#030712]"
           />
         ))}
       </div>
