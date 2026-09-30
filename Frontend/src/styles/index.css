@@ -57,7 +57,6 @@
       radial-gradient(ellipse 50% 30% at 90% 95%, rgba(34, 211, 238, 0.07) 0%, transparent 55%);
     background-attachment: fixed;
   }
-}
 
   ::selection {
     background-color: rgba(99, 102, 241, 0.4);
