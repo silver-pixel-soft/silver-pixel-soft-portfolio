@@ -98,7 +98,7 @@ const Pricing = () => {
   }, { scope: containerRef });
 
   return (
-    <section id="pricing" ref={containerRef} className="py-28 px-6 lg:px-20 mx-auto max-w-7xl relative">
+    <section id="pricing" ref={containerRef} className="py-20 sm:py-28 px-4 sm:px-6 lg:px-20 mx-auto max-w-7xl relative overflow-hidden">
       <SectionHeading
         subtitle="Transparent Investment"
         title="Predictable Pricing. Zero Surprises."

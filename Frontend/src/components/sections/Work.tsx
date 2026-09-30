@@ -249,7 +249,7 @@ const Work = () => {
   }, [selectedProject]);
 
   return (
-    <section id="work" ref={containerRef} className="py-28 px-6 lg:px-20 mx-auto max-w-7xl relative">
+    <section id="work" ref={containerRef} className="py-20 sm:py-28 px-4 sm:px-6 lg:px-20 mx-auto max-w-7xl relative overflow-hidden">
       {/* Background ambient decorative glow */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-sky-500/10 blur-[130px] -z-10 pointer-events-none rounded-full" />
       <div className="absolute bottom-1/4 right-10 w-[450px] h-[300px] bg-indigo-500/10 blur-[120px] -z-10 pointer-events-none rounded-full" />
@@ -427,7 +427,7 @@ const Work = () => {
           onClick={() => navigate("/all-projects")}
           variant="primary"
           size="md"
-          className="whitespace-nowrap gap-2"
+          className="whitespace-nowrap gap-2 w-full sm:w-auto"
         >
           <span>Explore All Projects</span>
           <ArrowRight className="w-4 h-4" />

@@ -106,7 +106,7 @@ const Service = () => {
   }, { scope: containerRef });
 
   return (
-    <section id="service" ref={containerRef} className="py-28 px-6 lg:px-20 mx-auto max-w-7xl relative">
+    <section id="service" ref={containerRef} className="py-20 sm:py-28 px-4 sm:px-6 lg:px-20 mx-auto max-w-7xl relative overflow-hidden">
       <SectionHeading
         subtitle="Services & Capabilities"
         title="Engineered for Exponential Growth"
@@ -203,7 +203,7 @@ const Service = () => {
 
         <button
           onClick={() => scrollToSection("contact")}
-          className="px-6 py-2.5 rounded-full bg-indigo-500 hover:bg-indigo-400 text-white text-sm font-semibold transition-all hover:shadow-lg hover:shadow-indigo-500/35 whitespace-nowrap"
+          className="w-full sm:w-auto px-6 py-2.5 rounded-full bg-indigo-500 hover:bg-indigo-400 text-white text-sm font-semibold transition-all hover:shadow-lg hover:shadow-indigo-500/35 text-center"
         >
           Book Custom Consultation
         </button>

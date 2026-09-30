@@ -330,7 +330,7 @@ export const AIAssistant: React.FC = () => {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 font-sans">
+    <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 font-sans max-w-[calc(100vw-2rem)]">
       {/* ========================================================================= */}
       {/* CHAT WINDOW WIDGET                                                       */}
       {/* ========================================================================= */}
@@ -339,7 +339,7 @@ export const AIAssistant: React.FC = () => {
           data-lenis-prevent="true"
           onWheel={(e) => e.stopPropagation()}
           onTouchMove={(e) => e.stopPropagation()}
-          className="w-[360px] sm:w-[410px] max-w-[calc(100vw-2rem)] h-[520px] max-h-[calc(100vh-6.5rem)] flex flex-col rounded-3xl bg-[#090d18]/95 backdrop-blur-2xl border border-white/15 shadow-[0_20px_60px_rgba(0,0,0,0.85),0_0_35px_rgba(56,189,248,0.2)] overflow-hidden animate-in fade-in zoom-in-95 duration-200 mb-3"
+          className="w-[calc(100vw-2rem)] sm:w-[400px] max-w-[400px] h-[500px] max-h-[calc(100vh-6rem)] flex flex-col rounded-3xl bg-[#090d18]/95 backdrop-blur-2xl border border-white/15 shadow-[0_20px_60px_rgba(0,0,0,0.85),0_0_35px_rgba(56,189,248,0.2)] overflow-hidden animate-in fade-in zoom-in-95 duration-200 mb-3"
         >
           {/* Header */}
           <div className="px-5 py-4 bg-white/[0.04] border-b border-white/[0.08] flex items-center justify-between">
@@ -409,8 +409,8 @@ export const AIAssistant: React.FC = () => {
               >
                 <div className="flex items-end gap-2 max-w-[85%]">
                   {msg.sender === "assistant" && (
-                    <div className="w-6 h-6 rounded-full bg-sky-500/20 border border-sky-400/30 flex items-center justify-center text-sky-400 flex-shrink-0 mb-1">
-                      <Sparkles className="w-3.5 h-3.5" />
+                    <div className="w-6 h-6 rounded-full bg-[#090d18] border border-sky-400/40 p-0.5 flex items-center justify-center flex-shrink-0 mb-1 overflow-hidden shadow-sm">
+                      <img src="/SPS.png" alt="SPS" className="w-full h-full object-contain" />
                     </div>
                   )}
 
@@ -536,14 +536,14 @@ export const AIAssistant: React.FC = () => {
           {isOpen ? (
             <X className="w-6 h-6 transition-transform rotate-90 duration-200" />
           ) : (
-            <>
-              <Bot className="w-7 h-7" />
+            <div className="relative w-full h-full p-2.5 flex items-center justify-center">
+              <Bot className="w-6 h-6 transition-transform" />
               {/* Online Pulse Indicator */}
               <span className="absolute top-1 right-1 flex h-3 w-3">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500 border border-black"></span>
               </span>
-            </>
+            </div>
           )}
 
           {/* Unread Message Badge if any */}

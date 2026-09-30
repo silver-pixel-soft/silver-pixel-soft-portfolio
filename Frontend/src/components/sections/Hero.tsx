@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import { ArrowRight, Play, Terminal, ShieldCheck, Zap, Cpu, Sparkles } from "lucide-react";
+import { ArrowRight, Play, ShieldCheck, Zap, Cpu, Sparkles } from "lucide-react";
 import { Button } from "../ui/Button";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -53,7 +53,7 @@ const Hero = () => {
     <section
       id="home"
       ref={containerRef}
-      className="relative flex min-h-[92vh] w-full flex-col justify-center px-6 lg:px-20 mx-auto max-w-7xl overflow-hidden pt-12 pb-20"
+      className="relative flex min-h-[92vh] w-full flex-col justify-center px-4 sm:px-6 lg:px-20 mx-auto max-w-7xl overflow-hidden pt-12 pb-20"
     >
       {/* Background Cyber Grid */}
       <div
@@ -75,7 +75,7 @@ const Hero = () => {
 
           {/* Eyebrow Badge */}
           <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-indigo-500/15 border border-indigo-400/30 backdrop-blur-md shadow-inner transition-transform hover:scale-105">
-            <span className="flex h-2 w-2 rounded-full bg-indigo-400 animate-pulse"></span>
+            <img src="/SPS.png" alt="SPS Logo" className="h-4 w-4 object-contain drop-shadow-[0_0_8px_rgba(56,189,248,0.5)]" />
             <span className="text-xs font-semibold tracking-wide text-indigo-300 uppercase">
               Award-Winning Digital Agency
             </span>
@@ -151,7 +151,7 @@ const Hero = () => {
                 <span className="h-3 w-3 rounded-full bg-[#ffbd2e] inline-block shadow-sm"></span>
                 <span className="h-3 w-3 rounded-full bg-[#27c93f] inline-block shadow-sm"></span>
                 <span className="ml-3 text-[11px] font-mono text-slate-300 flex items-center gap-1.5">
-                  <Terminal className="w-3.5 h-3.5 text-indigo-400" />
+                  <img src="/SPS.png" alt="SPS" className="w-3.5 h-3.5 object-contain" />
                   SilverPixelSoft.tsx
                 </span>
               </div>
@@ -177,7 +177,7 @@ const Hero = () => {
             </div>
 
             {/* Code Area */}
-            <div className="p-5 font-mono text-xs sm:text-[13px] leading-relaxed select-none min-h-[260px]">
+            <div className="p-4 sm:p-5 font-mono text-[11px] sm:text-[13px] leading-relaxed select-none min-h-[260px] overflow-x-auto">
               {activeCodeTab === "app" ? (
                 <div className="space-y-1.5">
                   <div className="text-slate-500">// Silver Pixel Soft Digital Pipeline</div>
@@ -249,7 +249,7 @@ const Hero = () => {
           {/* Floating Badge 1 */}
           <div
             ref={floatCard1Ref}
-            className="absolute -top-6 -right-4 sm:-right-6 bg-[#1a1e2e]/95 border border-indigo-500/40 p-3.5 rounded-2xl shadow-xl backdrop-blur-xl flex items-center gap-3 z-20"
+            className="absolute -top-6 -right-4 sm:-right-6 bg-[#1a1e2e]/95 border border-indigo-500/40 p-3.5 rounded-2xl shadow-xl backdrop-blur-xl hidden sm:flex items-center gap-3 z-20"
           >
             <div className="h-10 w-10 rounded-xl bg-indigo-500/25 border border-indigo-500/35 flex items-center justify-center text-indigo-400">
               <Zap className="h-5 w-5" />
@@ -265,7 +265,7 @@ const Hero = () => {
           {/* Floating Badge 2 */}
           <div
             ref={floatCard2Ref}
-            className="absolute -bottom-6 -left-4 sm:-left-6 bg-[#1a1e2e]/95 border border-cyan-500/35 p-3.5 rounded-2xl shadow-xl backdrop-blur-xl flex items-center gap-3 z-20"
+            className="absolute -bottom-6 -left-4 sm:-left-6 bg-[#1a1e2e]/95 border border-cyan-500/35 p-3.5 rounded-2xl shadow-xl backdrop-blur-xl hidden sm:flex items-center gap-3 z-20"
           >
             <div className="h-10 w-10 rounded-xl bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
               <ShieldCheck className="h-5 w-5" />

@@ -34,18 +34,36 @@ const PrivacyPolicy = () => {
   }, []);
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-[#030712] pt-32 pb-24 px-6 lg:px-20 mx-auto w-full relative">
+    <div ref={containerRef} className="min-h-screen bg-[#030712] pt-28 sm:pt-32 pb-24 px-4 sm:px-6 lg:px-20 mx-auto w-full relative overflow-hidden">
       <CustomCursor />
       
       <div className="max-w-4xl mx-auto relative z-10">
         <div ref={headingRef} className="flex flex-col mb-16 gap-6">
-          <button 
-            onClick={() => navigate(-1)} 
-            className="flex items-center gap-2 text-sky-400 hover:text-sky-300 transition-colors w-fit mb-4 group font-medium"
-          >
-            <ArrowLeft className="w-5 h-5 transform group-hover:-translate-x-1 transition-transform" />
-            Back
-          </button>
+          <div className="flex items-center justify-between mb-4">
+            <button 
+              onClick={() => navigate(-1)} 
+              className="flex items-center gap-2 text-sky-400 hover:text-sky-300 transition-colors w-fit group font-medium"
+            >
+              <ArrowLeft className="w-5 h-5 transform group-hover:-translate-x-1 transition-transform" />
+              Back
+            </button>
+            <div 
+              onClick={() => navigate("/")} 
+              className="flex items-center gap-3 cursor-pointer group"
+            >
+              <div className="relative flex h-8 w-8 items-center justify-center">
+                <div className="absolute inset-0 bg-sky-500/20 rounded-full blur-sm opacity-60 group-hover:opacity-100 transition-opacity" />
+                <img
+                  src="/SPS.png"
+                  alt="Silver Pixel Soft Logo"
+                  className="relative h-8 w-8 object-contain drop-shadow-[0_0_10px_rgba(56,189,248,0.45)] transition-transform group-hover:scale-110"
+                />
+              </div>
+              <span className="text-sm font-bold text-white group-hover:text-sky-300 transition-colors hidden sm:inline-block">
+                Silver Pixel Soft
+              </span>
+            </div>
+          </div>
           <SectionHeading
             align="left"
             subtitle="Legal"

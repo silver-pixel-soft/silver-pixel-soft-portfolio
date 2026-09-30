@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Home } from "./pages/index.ts";
 import { Header, Footer } from "./components/layouts/index.ts";
 import Lenis from "lenis";
@@ -7,11 +7,28 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { CustomCursor } from "./components/ui/CustomCursor.tsx";
 import { AIAssistant } from "./components/ui/AIAssistant.tsx";
+import { Preloader } from "./components/ui/Preloader.tsx";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const App = () => {
   const lenisRef = useRef<Lenis | null>(null);
+  const [isLoading, setIsLoading] = useState(() => {
+    try {
+      return sessionStorage.getItem("sps_has_loaded") !== "true";
+    } catch {
+      return true;
+    }
+  });
+
+  useEffect(() => {
+    if (isLoading) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+      ScrollTrigger.refresh();
+    }
+  }, [isLoading]);
 
   useEffect(() => {
     // Initialize smooth scrolling with Lenis
@@ -49,10 +66,20 @@ const App = () => {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-[#030712] text-white">
+    <div className="relative min-h-screen bg-[#030712] text-white w-full max-w-[100vw] overflow-x-hidden">
+      {isLoading && (
+        <Preloader
+          onComplete={() => {
+            try {
+              sessionStorage.setItem("sps_has_loaded", "true");
+            } catch {}
+            setIsLoading(false);
+          }}
+        />
+      )}
       <CustomCursor />
       <Header />
-      <main>
+      <main className="w-full max-w-[100vw] overflow-x-hidden">
         <Home />
       </main>
       <Footer />

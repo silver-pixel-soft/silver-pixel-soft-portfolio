@@ -61,7 +61,7 @@ const Contact = () => {
   }, { scope: containerRef });
 
   return (
-    <section id="contact" ref={containerRef} className="py-28 px-6 lg:px-20 mx-auto max-w-7xl relative overflow-hidden">
+    <section id="contact" ref={containerRef} className="py-20 sm:py-28 px-4 sm:px-6 lg:px-20 mx-auto max-w-7xl relative overflow-hidden">
       {/* Ambient Glow Orbs */}
       <div className="absolute top-1/2 right-1/4 w-[500px] h-[500px] bg-sky-500/10 rounded-full blur-[140px] pointer-events-none -z-10" />
       <div className="absolute bottom-10 left-1/4 w-[450px] h-[450px] bg-purple-500/10 rounded-full blur-[140px] pointer-events-none -z-10" />
@@ -87,15 +87,15 @@ const Contact = () => {
           <div className="space-y-4 pt-2">
             {/* Email Card */}
             <div className="flex items-center justify-between p-4 rounded-2xl bg-[#090d18] border border-white/[0.08] hover:border-sky-500/30 transition-all group">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 group-hover:scale-105 transition-transform">
+              <div className="flex items-center gap-4 min-w-0">
+                <div className="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 group-hover:scale-105 transition-transform shrink-0">
                   <Mail className="w-5 h-5" />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <h4 className="text-xs font-semibold text-neutral-400 uppercase tracking-wider">Email Us Directly</h4>
                   <a
                     href="mailto:noreplyonlymail@gmail.com"
-                    className="text-sm font-bold text-white hover:text-sky-400 transition-colors"
+                    className="text-xs sm:text-sm font-bold text-white hover:text-sky-400 transition-colors break-all block"
                   >
                     noreplyonlymail@gmail.com
                   </a>
@@ -103,7 +103,7 @@ const Contact = () => {
               </div>
               <button
                 onClick={handleCopyEmail}
-                className="p-2 rounded-lg bg-white/[0.04] hover:bg-white/[0.1] text-neutral-400 hover:text-white transition-colors"
+                className="p-2 rounded-lg bg-white/[0.04] hover:bg-white/[0.1] text-neutral-400 hover:text-white transition-colors shrink-0 ml-2"
                 title="Copy Email"
               >
                 {copiedEmail ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}

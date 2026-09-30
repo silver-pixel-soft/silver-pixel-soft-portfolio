@@ -94,7 +94,7 @@ const AllProject = () => {
   }, [selectedProject]);
 
   return (
-    <div ref={containerRef} className="min-h-screen pt-28 pb-24 px-6 lg:px-20 mx-auto max-w-7xl relative">
+    <div ref={containerRef} className="min-h-screen pt-24 sm:pt-28 pb-24 px-4 sm:px-6 lg:px-20 mx-auto max-w-7xl relative overflow-hidden">
       <CustomCursor />
 
       {/* Ambient background glows */}
@@ -103,13 +103,32 @@ const AllProject = () => {
 
       {/* Top Navigation & Header */}
       <div ref={headingRef} className="flex flex-col mb-10 gap-6">
-        <button
-          onClick={() => navigate("/")}
-          className="flex items-center gap-2 text-sky-400 hover:text-sky-300 transition-colors w-fit group font-semibold text-sm"
-        >
-          <ArrowLeft className="w-4 h-4 transform group-hover:-translate-x-1.5 transition-transform" />
-          Back to Home
-        </button>
+        <div className="flex items-center justify-between">
+          <button
+            onClick={() => navigate("/")}
+            className="flex items-center gap-2 text-sky-400 hover:text-sky-300 transition-colors w-fit group font-semibold text-sm"
+          >
+            <ArrowLeft className="w-4 h-4 transform group-hover:-translate-x-1.5 transition-transform" />
+            Back to Home
+          </button>
+
+          <div
+            onClick={() => navigate("/")}
+            className="flex items-center gap-3 cursor-pointer group"
+          >
+            <div className="relative flex h-8 w-8 items-center justify-center">
+              <div className="absolute inset-0 bg-sky-500/20 rounded-full blur-sm opacity-60 group-hover:opacity-100 transition-opacity" />
+              <img
+                src="/SPS.png"
+                alt="Silver Pixel Soft Logo"
+                className="relative h-8 w-8 object-contain drop-shadow-[0_0_10px_rgba(56,189,248,0.45)] transition-transform group-hover:scale-110"
+              />
+            </div>
+            <span className="text-sm font-bold text-white group-hover:text-sky-300 transition-colors hidden sm:inline-block">
+              Silver Pixel Soft
+            </span>
+          </div>
+        </div>
 
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
           <SectionHeading

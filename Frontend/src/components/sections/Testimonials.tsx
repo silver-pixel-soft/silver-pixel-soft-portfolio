@@ -55,7 +55,7 @@ const Testimonials = () => {
   }, { scope: containerRef });
 
   return (
-    <section id="testimonials" ref={containerRef} className="py-28 px-6 lg:px-20 mx-auto max-w-7xl relative">
+    <section id="testimonials" ref={containerRef} className="py-20 sm:py-28 px-4 sm:px-6 lg:px-20 mx-auto max-w-7xl relative overflow-hidden">
       <SectionHeading
         subtitle="Social Proof"
         title="Trusted by Fast-Growing Companies"

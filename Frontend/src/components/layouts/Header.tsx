@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import useScrollToSection from "../../hooks/useScrollToSection";
-import { Menu, X, ArrowUpRight, Sparkles } from "lucide-react";
+import { Menu, X, ArrowUpRight } from "lucide-react";
 import { Button } from "../ui/Button";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -105,22 +105,25 @@ const Header = () => {
             : "border-b border-transparent bg-transparent"
         }`}
       >
-        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-20">
+        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-20">
           {/* Brand Logo */}
           <div
-            className="flex cursor-pointer items-center gap-3 group"
+            className="flex cursor-pointer items-center gap-3.5 group"
             onClick={() => scrollToSection("home")}
           >
-            <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-sky-400 via-indigo-500 to-purple-600 p-[1px] shadow-lg shadow-sky-500/20 group-hover:shadow-sky-500/40 transition-shadow">
-              <div className="flex h-full w-full items-center justify-center rounded-[11px] bg-[#090d16] transition-colors group-hover:bg-[#0e1424]">
-                <Sparkles className="h-5 w-5 text-sky-400 transition-transform group-hover:rotate-12 group-hover:scale-110 duration-300" />
-              </div>
+            <div className="relative flex h-10 w-10 items-center justify-center">
+              <div className="absolute inset-0 bg-sky-500/25 rounded-full blur-md opacity-60 group-hover:opacity-100 group-hover:scale-125 transition-all duration-300" />
+              <img
+                src="/SPS.png"
+                alt="Silver Pixel Soft Logo"
+                className="relative h-10 w-10 object-contain drop-shadow-[0_0_12px_rgba(56,189,248,0.45)] transition-transform group-hover:scale-110 duration-300"
+              />
             </div>
             <div className="flex flex-col">
-              <span className="text-lg font-extrabold tracking-tight text-white group-hover:text-sky-300 transition-colors">
+              <span className="text-lg font-extrabold tracking-tight text-white group-hover:text-sky-300 transition-colors leading-tight">
                 Silver Pixel Soft
               </span>
-              <span className="text-[10px] uppercase tracking-widest text-neutral-400 font-semibold">
+              <span className="text-[10px] uppercase tracking-widest text-sky-400/80 font-mono font-semibold">
                 Digital Agency
               </span>
             </div>
@@ -177,13 +180,18 @@ const Header = () => {
       <div
         ref={menuRef}
         style={{ display: "none", opacity: 0 }}
-        className="fixed top-0 right-0 z-[100] h-screen w-full sm:w-[420px] border-l border-white/10 bg-[#060a12]/95 backdrop-blur-2xl md:hidden flex-col shadow-2xl"
+        className="fixed top-0 right-0 z-[100] h-screen w-full max-w-[100vw] sm:w-[420px] border-l border-white/10 bg-[#060a12]/95 backdrop-blur-2xl md:hidden flex-col shadow-2xl"
       >
         {/* Drawer Header */}
         <div className="flex h-20 items-center justify-between px-8 border-b border-white/5">
-          <div className="flex items-center gap-2">
-            <div className="h-2 w-2 rounded-full bg-sky-400 animate-pulse" />
-            <span className="text-sm font-semibold tracking-wide text-neutral-300">Menu</span>
+          <div className="flex items-center gap-3">
+            <div className="h-9 w-9 rounded-xl bg-white/[0.06] border border-white/10 p-1 flex items-center justify-center overflow-hidden shadow-inner">
+              <img src="/SPS.png" alt="Silver Pixel Soft Logo" className="h-full w-full object-contain" />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-sm font-bold tracking-tight text-white">Silver Pixel Soft</span>
+              <span className="text-[10px] text-sky-400 font-mono">Digital Agency</span>
+            </div>
           </div>
           <button
             aria-label="Close Navigation Menu"

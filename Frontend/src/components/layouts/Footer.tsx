@@ -1,13 +1,13 @@
 import useScrollToSection from "../../hooks/useScrollToSection";
 import { Link } from "react-router-dom";
-import { Sparkles, ArrowUpRight, Mail, Phone, MapPin } from "lucide-react";
+import { ArrowUpRight, Mail, Phone, MapPin } from "lucide-react";
 import { GithubIcon, TwitterIcon, LinkedinIcon, InstagramIcon, FacebookIcon } from "../ui/Icons";
 
 const Footer = () => {
   const scrollToSection = useScrollToSection();
 
   return (
-    <footer className="border-t border-white/[0.08] bg-[#02050c] px-6 py-16 lg:px-20 relative overflow-hidden">
+    <footer className="border-t border-white/[0.08] bg-[#02050c] px-4 sm:px-6 py-16 lg:px-20 relative overflow-hidden">
       {/* Background ambient glow */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-sky-500/[0.03] rounded-full blur-[120px] pointer-events-none" />
 
@@ -15,15 +15,23 @@ const Footer = () => {
         
         {/* Brand Column (5 cols) */}
         <div className="lg:col-span-5 space-y-6">
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-sky-400 via-indigo-500 to-purple-600 p-[1px]">
-              <div className="flex h-full w-full items-center justify-center rounded-[11px] bg-[#090d16]">
-                <Sparkles className="h-4 w-4 text-sky-400" />
-              </div>
+          <div className="flex items-center gap-3.5 group">
+            <div className="relative flex h-10 w-10 items-center justify-center">
+              <div className="absolute inset-0 bg-sky-500/20 rounded-full blur-md opacity-60" />
+              <img
+                src="/SPS.png"
+                alt="Silver Pixel Soft Logo"
+                className="relative h-10 w-10 object-contain drop-shadow-[0_0_12px_rgba(56,189,248,0.45)]"
+              />
             </div>
-            <span className="text-xl font-extrabold text-white tracking-tight">
-              Silver Pixel Soft
-            </span>
+            <div className="flex flex-col">
+              <span className="text-xl font-extrabold text-white tracking-tight leading-tight">
+                Silver Pixel Soft
+              </span>
+              <span className="text-[10px] uppercase tracking-widest text-sky-400/80 font-mono font-semibold">
+                Studio & Labs
+              </span>
+            </div>
           </div>
 
           <p className="text-sm leading-relaxed text-neutral-400 max-w-sm">
