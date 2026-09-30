@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { CustomCursor } from "./components/ui/CustomCursor.tsx";
+import { AIAssistant } from "./components/ui/AIAssistant.tsx";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -55,6 +56,7 @@ const App = () => {
         <Home />
       </main>
       <Footer />
+      <AIAssistant />
     </div>
   );
 };

@@ -6,7 +6,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import {
   PrivacyPolicy,
   TermsOfService,
-  AllProject
+  AllProject,
+  AdminController,
 } from './pages/index.ts'
 
 const router = createBrowserRouter([
@@ -32,6 +33,16 @@ const router = createBrowserRouter([
     path: '/terms-of-service',
     element: <TermsOfService />,
   },
+  {
+    path: '/admin',
+    element: <AdminController />,
+    children: [
+      {
+        path: '/admin',
+        element: <AdminController />,
+      }
+    ]
+  }
 ])
 
 createRoot(document.getElementById('root')!).render(
