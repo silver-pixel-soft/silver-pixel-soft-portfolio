@@ -102,7 +102,7 @@ export const projectsData: ProjectItem[] = [
     categoryLabel: "Travel & Hospitality",
     featured: true,
     role: "Full Stack Engineer",
-    completionYear: "2024",
+    completionYear: "2026",
     metrics: [
       { label: "Payment Gateway", value: "Razorpay" },
       { label: "Media Engine", value: "Cloudinary CDN" },
@@ -140,7 +140,7 @@ export const projectsData: ProjectItem[] = [
     categoryLabel: "Lio",
     featured: true,
     role: "Full Stack Developer",
-    completionYear: "2024",
+    completionYear: "2026",
     metrics: [
       { label: "Redirect Speed", value: "<50ms" },
       { label: "Telemetry", value: "Real-time" },
@@ -178,7 +178,7 @@ export const projectsData: ProjectItem[] = [
     categoryLabel: "Khabri",
     featured: false,
     role: "Frontend Developer",
-    completionYear: "2024",
+    completionYear: "2025",
     metrics: [
       { label: "Global Sources", value: "50+ Feeds" },
       { label: "Search Latency", value: "<15ms" },
@@ -216,7 +216,7 @@ export const projectsData: ProjectItem[] = [
     categoryLabel: "Chat Bot",
     featured: false,
     role: "AI & Frontend Engineer",
-    completionYear: "2024",
+    completionYear: "2025",
     metrics: [
       { label: "Response Mode", value: "Token Stream" },
       { label: "Context Window", value: "Multi-turn" },
