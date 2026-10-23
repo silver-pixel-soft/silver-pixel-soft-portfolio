@@ -20,6 +20,7 @@ import portfolioImage from "../../assets/Portfolio.png";
 import lioImage from "../../assets/Lio.png";
 import khabriImage from "../../assets/Khabri.png";
 import chatBotImage from "../../assets/ChatBot.png";
+import NextStopImage from "../../assets/NextStop.png";
 
 export interface ProjectMetric {
   label: string;
@@ -84,6 +85,44 @@ export const projectsData: ProjectItem[] = [
       {
         name: "Live Demo",
         url: "https://akshay-kumar-two.vercel.app/",
+      },
+    ],
+  },
+  {
+    id: "nextstop",
+    title: "NextStop — Travel & Tourism",
+    category: "Web Development",
+    description:
+      "Full-stack tour and travel management platform featuring automated booking pipelines, dynamic package itineraries, and secure online payments.",
+    detailedOverview:
+      "A comprehensive travel and hospitality booking platform engineered with Python and Django. Features dynamic holiday package catalogs, seamless online payment integration via Razorpay, cloud-hosted media optimization through Cloudinary CDN, and customer reservation dashboards.",
+    tags: ["Python", "Django", "Razorpay", "Cloudinary", "MongoDB", "JavaScript"],
+    status: "Live Platform",
+    image: NextStopImage,
+    categoryLabel: "Travel & Hospitality",
+    featured: true,
+    role: "Full Stack Engineer",
+    completionYear: "2024",
+    metrics: [
+      { label: "Payment Gateway", value: "Razorpay" },
+      { label: "Media Engine", value: "Cloudinary CDN" },
+      { label: "Architecture", value: "Django MVC" },
+    ],
+    highlights: [
+      "End-to-end holiday package booking workflow with dynamic pricing and automated invoice confirmations",
+      "Secure online transaction settlement integrated with Razorpay payment gateway and webhooks",
+      "High-performance media pipeline using Cloudinary CDN for responsive destination galleries",
+      "Customer authentication, booking history portal, and administrative tour catalog management controls",
+    ],
+    architecture: ["Python 3", "Django Web Framework", "Razorpay Payment Gateway", "Cloudinary CDN", "MongoDB", "JavaScript (ES6+)"],
+    links: [
+      {
+        name: "GitHub",
+        url: "https://github.com/akshaykumar401/Tour_-_Traval",
+      },
+      {
+        name: "Live Demo",
+        url: "https://nextstop-7slu.onrender.com/",
       },
     ],
   },
