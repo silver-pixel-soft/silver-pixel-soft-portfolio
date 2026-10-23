@@ -101,6 +101,12 @@ const Footer = () => {
                 Pricing & FAQ
               </button>
             </li>
+            <li>
+              <Link to="/user/review" className="hover:text-sky-400 transition-colors flex items-center gap-1.5">
+                <span>Client Reviews</span>
+                <span className="text-[10px] bg-indigo-500/20 text-indigo-300 px-1.5 py-0.2 rounded-full border border-indigo-500/30">Wall of Love</span>
+              </Link>
+            </li>
           </ul>
         </div>
 
@@ -149,6 +155,12 @@ const Footer = () => {
               <Link to="/all-projects" className="hover:text-sky-400 transition-colors flex items-center gap-1">
                 <span>Portfolio Archive</span>
                 <ArrowUpRight className="w-3.5 h-3.5 opacity-60" />
+              </Link>
+            </li>
+            <li>
+              <Link to="/admin" className="text-slate-500 hover:text-indigo-400 transition-colors flex items-center gap-1">
+                <span>Admin Cockpit</span>
+                <span className="text-[9px] font-mono bg-white/[0.04] px-1.5 py-0.2 rounded border border-white/10">Staff</span>
               </Link>
             </li>
           </ul>

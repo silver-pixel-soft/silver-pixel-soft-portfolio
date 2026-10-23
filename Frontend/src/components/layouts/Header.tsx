@@ -34,6 +34,7 @@ const Header = () => {
     { name: "Work", id: "work" },
     { name: "Process", id: "process" },
     { name: "Pricing", id: "pricing" },
+    { name: "Reviews", id: "testimonials" },
   ];
 
   const handleNavClick = (id: string) => {

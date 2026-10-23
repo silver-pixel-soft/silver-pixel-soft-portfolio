@@ -30,6 +30,28 @@ const Contact = () => {
     e.preventDefault();
     if (!formData.email || !formData.firstName) return;
     setFormSubmitted(true);
+
+    try {
+      const stored = localStorage.getItem("sps_admin_requests");
+      const currentList = stored ? JSON.parse(stored) : [];
+      const newInquiry = {
+        id: `req-${Date.now().toString().slice(-4)}`,
+        clientName: `${formData.firstName} ${formData.lastName}`.trim(),
+        company: "Direct Inbound Lead",
+        email: formData.email,
+        service: formData.service || "Web Development",
+        budget: formData.budget || "$10,000 - $25,000",
+        timeline: "2 - 4 Weeks",
+        status: "pending",
+        date: "Just now",
+        description: formData.message || "Client submitted inquiry through homepage contact form.",
+        estimatedValue: 18000,
+        avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+      };
+      localStorage.setItem("sps_admin_requests", JSON.stringify([newInquiry, ...currentList]));
+    } catch {
+      // ignore
+    }
   };
 
   useGSAP(() => {

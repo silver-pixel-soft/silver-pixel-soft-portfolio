@@ -41,10 +41,17 @@
     box-sizing: border-box;
   }
 
-  html,
-  body {
-    max-width: 100vw;
+  html {
+    max-width: 100%;
     overflow-x: hidden;
+    overflow-y: auto;
+    width: 100%;
+  }
+
+  body {
+    max-width: 100%;
+    overflow-x: clip;
+    overflow-y: visible;
     width: 100%;
   }
 
@@ -75,12 +82,64 @@
 
 /* ═══════════════════════════
    HIDE SYSTEM CURSOR
-   (replaced by custom cursor on desktop)
+   (replaced by custom cursor on desktop, EXCEPT in admin)
 ═══════════════════════════ */
 @media (min-width: 768px) and (hover: hover) and (pointer: fine) {
-  * {
+  body:not(.admin-cursor) *:not(.admin-cursor *) {
     cursor: none !important;
   }
+}
+
+/* ═══════════════════════════
+   RESTORE DEFAULT CURSOR IN ADMIN
+═══════════════════════════ */
+body.admin-cursor,
+body.admin-cursor *,
+.admin-cursor,
+.admin-cursor * {
+  cursor: auto !important;
+}
+
+body.admin-cursor button,
+body.admin-cursor a,
+body.admin-cursor [role="button"],
+body.admin-cursor select,
+body.admin-cursor input[type="checkbox"],
+body.admin-cursor input[type="radio"],
+.admin-cursor button,
+.admin-cursor a,
+.admin-cursor [role="button"],
+.admin-cursor select,
+.admin-cursor input[type="checkbox"],
+.admin-cursor input[type="radio"] {
+  cursor: pointer !important;
+}
+
+body.admin-cursor input[type="text"],
+body.admin-cursor input[type="email"],
+body.admin-cursor input[type="password"],
+body.admin-cursor input[type="number"],
+body.admin-cursor input[type="url"],
+body.admin-cursor textarea,
+.admin-cursor input[type="text"],
+.admin-cursor input[type="email"],
+.admin-cursor input[type="password"],
+.admin-cursor input[type="number"],
+.admin-cursor input[type="url"],
+.admin-cursor textarea {
+  cursor: text !important;
+}
+
+/* ═══════════════════════════
+   PREVENT DOUBLE SCROLLBARS IN ADMIN
+═══════════════════════════ */
+body.admin-cursor {
+  overflow-x: clip !important;
+  overflow-y: visible !important;
+}
+
+.admin-cursor {
+  overflow-x: clip;
 }
 
 /* ═══════════════════════════

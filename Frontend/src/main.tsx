@@ -8,6 +8,7 @@ import {
   TermsOfService,
   AllProject,
   AdminController,
+  Review
 } from './pages/index.ts'
 
 const router = createBrowserRouter([
@@ -34,15 +35,25 @@ const router = createBrowserRouter([
     element: <TermsOfService />,
   },
   {
+    path: '/user/review',
+    element: <Review />,
+  },
+  {
     path: '/admin',
     element: <AdminController />,
-    children: [
-      {
-        path: '/admin',
-        element: <AdminController />,
-      }
-    ]
-  }
+  },
+  {
+    path: '/admin/login',
+    element: <AdminController defaultView="login" />,
+  },
+  {
+    path: '/admin/forget-password',
+    element: <AdminController defaultView="forget-password" />,
+  },
+  {
+    path: '/admin/dashboard',
+    element: <AdminController defaultView="dashboard" />,
+  },
 ])
 
 createRoot(document.getElementById('root')!).render(
