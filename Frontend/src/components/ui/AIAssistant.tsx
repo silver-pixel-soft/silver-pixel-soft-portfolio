@@ -9,189 +9,25 @@ import {
   User,
   ChevronDown,
 } from "lucide-react";
-
-interface Message {
-  id: string;
-  sender: "user" | "assistant";
-  text: string;
-  timestamp: string;
-  chips?: string[];
-}
-
-const INITIAL_MESSAGES: Message[] = [
-  {
-    id: "init-1",
-    sender: "assistant",
-    text: "👋 **Hello! I'm Silver AI**, your interactive assistant for Silver Pixel Soft.\n\nI can help you explore our **featured projects**, **tech stack**, **client services**, or **pricing**. What would you like to know?",
-    timestamp: "Just now",
-    chips: [
-      "Show featured projects",
-      "Tell me about Lio SaaS",
-      "What services do you provide?",
-      "What is your tech stack?",
-      "How can I contact you?",
-    ],
-  },
-];
-
-// Curated Knowledge Base for intelligent responses
-const generateAIResponse = (query: string): { reply: string; chips?: string[] } => {
-  const q = query.toLowerCase().trim();
-
-  // Projects - General
-  if (q.includes("project") || q.includes("work") || q.includes("case stud")) {
-    return {
-      reply:
-        "🚀 **Our Flagship Projects:**\n\n" +
-        "1. **Personal Portfolio** — Interactive digital showcase featuring React 19, GSAP orchestration, and Lenis virtual physics.\n" +
-        "2. **Lio** — Cloud-native SaaS link management platform with real-time clickstream telemetry and sub-50ms redirection.\n" +
-        "3. **Khabri** — High-velocity news aggregator pulling from 50+ global feeds with distraction-free reader mode.\n" +
-        "4. **Chat Bot** — AI conversational assistant with streaming token responses & markdown code formatting.\n\n" +
-        "Ask me about any specific project (e.g. *'Tell me about Lio'*) or click below!",
-      chips: ["Tell me about Lio", "Tell me about Portfolio", "View All Projects page"],
-    };
-  }
-
-  // Lio
-  if (q.includes("lio")) {
-    return {
-      reply:
-        "⚡ **Lio — Cloud-Native Link Management & Telemetry**\n\n" +
-        "• **Core Specs**: Sub-50ms URL redirection, distributed edge caching, real-time clickstream analytics.\n" +
-        "• **Tech Stack**: React.js, Node.js, Express, MongoDB, Chart.js.\n" +
-        "• **Features**: Interactive geo-location telemetry, QR code generation with vector exports, and JWT-authenticated dashboard.\n\n" +
-        "Would you like to visit the live app or source code?",
-      chips: ["Open Lio live demo", "What tech stack do you use?", "Show other projects"],
-    };
-  }
-
-  // Personal Portfolio
-  if (q.includes("portfolio")) {
-    return {
-      reply:
-        "🎨 **Personal Portfolio — Digital Experience**\n\n" +
-        "• **Motion Engine**: GSAP 3 + ScrollTrigger with custom easing.\n" +
-        "• **Physics**: Virtual smooth scroll with Lenis (60 FPS).\n" +
-        "• **Stack**: React 19, Vite, Tailwind CSS.\n" +
-        "• **Highlights**: Physics-based cursor tracking, glassmorphic cards, and zero-layout-shift responsive performance.",
-      chips: ["Show featured projects", "Tell me about services", "How to get in touch?"],
-    };
-  }
-
-  // Khabri
-  if (q.includes("khabri") || q.includes("news")) {
-    return {
-      reply:
-        "📰 **Khabri — Global News Content Aggregator**\n\n" +
-        "• **Feed Ingestion**: Live REST API ingestion across 50+ international feeds.\n" +
-        "• **Performance**: Instant search query debounce (<15ms latency).\n" +
-        "• **Reader Mode**: Distraction-free clean reading view optimized for mobile & desktop.\n" +
-        "• **Tech Stack**: React 18, Tailwind CSS, News API.",
-      chips: ["Tell me about Chat Bot", "Tell me about Lio", "Show services"],
-    };
-  }
-
-  // Chat Bot
-  if (q.includes("chat") || q.includes("bot") || q.includes("llm") || q.includes("ai")) {
-    return {
-      reply:
-        "🤖 **Chat Bot — LLM Conversational Assistant**\n\n" +
-        "• **Capabilities**: Real-time token streaming, multi-turn prompt context retention, copyable code blocks with syntax highlighting.\n" +
-        "• **Stack**: JavaScript ESNext, OpenRouter/LLM APIs, Server-Sent Events (SSE), CSS3 micro-animations.\n" +
-        "• **Deployment**: Production deployed AI web assistant.",
-      chips: ["Show featured projects", "What services do you provide?", "Contact us"],
-    };
-  }
-
-  // Services
-  if (q.includes("service") || q.includes("offer") || q.includes("what do you do") || q.includes("help")) {
-    return {
-      reply:
-        "💼 **Services Offered by Silver Pixel Soft:**\n\n" +
-        "1. **Full-Stack Web Development** — High-performance, scalable web apps built with modern React, Next.js, and Node.js.\n" +
-        "2. **UI/UX & Motion Design** — Award-winning digital experiences, custom design systems, and fluid GSAP micro-interactions.\n" +
-        "3. **AI & Agent Integrations** — Custom conversational chatbots, automated AI workflows, and LLM API integrations.\n" +
-        "4. **API & SaaS Architecture** — Distributed backend APIs, database design, and cloud deployments.",
-      chips: ["What are your pricing plans?", "How can I contact you?", "Show featured projects"],
-    };
-  }
-
-  // Tech Stack / Skills
-  if (q.includes("stack") || q.includes("tech") || q.includes("skill") || q.includes("tool") || q.includes("language")) {
-    return {
-      reply:
-        "🛠️ **Our Core Engineering Stack:**\n\n" +
-        "• **Frontend**: React 19, TypeScript, JavaScript (ESNext), Tailwind CSS v4, HTML5/CSS3.\n" +
-        "• **Motion & Physics**: GSAP (GreenSock), ScrollTrigger, Lenis Smooth Scroll.\n" +
-        "• **Backend & APIs**: Node.js, Express, Python (Flask), RESTful APIs, JWT.\n" +
-        "• **Databases & Tools**: MongoDB, Git, Vite, Postman, Vercel.",
-      chips: ["Show featured projects", "What services do you provide?", "How can I contact you?"],
-    };
-  }
-
-  // Contact / Hire
-  if (q.includes("contact") || q.includes("hire") || q.includes("reach") || q.includes("email") || q.includes("call")) {
-    return {
-      reply:
-        "📬 **Let's Build Something Exceptional Together!**\n\n" +
-        "You can reach out directly via our **Contact Form** at the bottom of the page.\n\n" +
-        "• **Email**: Fill out the form in the Contact section.\n" +
-        "• **Turnaround**: We typically respond within 24 business hours.\n" +
-        "• **Consultations**: We offer initial architecture & project estimation sessions.",
-      chips: ["Scroll to Contact Form", "Tell me about pricing", "Show featured projects"],
-    };
-  }
-
-  // Pricing
-  if (q.includes("price") || q.includes("pricing") || q.includes("cost") || q.includes("rate") || q.includes("package")) {
-    return {
-      reply:
-        "💳 **Flexible Project Engagements:**\n\n" +
-        "• **Starter / MVP**: Ideal for landing pages, prototypes, and targeted web apps.\n" +
-        "• **Professional SaaS**: End-to-end full-stack development, database architecture, and custom UI design.\n" +
-        "• **Enterprise / Bespoke**: Complex multi-service platforms, custom AI workflows, and dedicated engineering sprints.\n\n" +
-        "Check our **Pricing** section on the homepage or reach out for a custom quotation tailored to your timeline!",
-      chips: ["How can I contact you?", "What services do you provide?", "Show featured projects"],
-    };
-  }
-
-  // Who is Akshay / Silver Pixel Soft
-  if (q.includes("who are you") || q.includes("akshay") || q.includes("silver pixel") || q.includes("about")) {
-    return {
-      reply:
-        "✨ **Silver Pixel Soft** is a creative digital engineering studio founded by **Akshay Kumar**.\n\n" +
-        "We specialize in crafting bespoke web experiences, fluid interactive interfaces, and robust cloud applications with an obsession for speed, design aesthetics, and modern web standards.",
-      chips: ["Show featured projects", "What services do you provide?", "How can I contact you?"],
-    };
-  }
-
-  // Greeting
-  if (q.includes("hi") || q.includes("hello") || q.includes("hey") || q.includes("good morning") || q.includes("good evening")) {
-    return {
-      reply:
-        "👋 Hello! Great to meet you! How can I assist with your software, design, or project requirements today?",
-      chips: ["Show featured projects", "What services do you provide?", "Tell me about Lio"],
-    };
-  }
-
-  // Default fallback
-  return {
-    reply:
-      `Thanks for asking about "${query}"! As Silver AI, I specialize in providing insights into our **projects** (Lio, Portfolio, Khabri, Chat Bot), **engineering stack**, **services**, and **client partnerships**.\n\nWould you like to explore any of these areas?`,
-    chips: ["Show featured projects", "What services do you provide?", "How can I contact you?"],
-  };
-};
+import { useAppDispatch, useAppSelector } from "../../app/hooks.ts";
+import {
+  addUserMessage,
+  sendAIMessage,
+  clearMessages,
+} from "../../features/ai/ai.slice.ts";
 
 export const AIAssistant: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [messages, setMessages] = useState<Message[]>(INITIAL_MESSAGES);
-  const [inputValue, setInputValue] = useState<string>("");
-  const [isTyping, setIsTyping] = useState<boolean>(false);
+  const [inputValue, setInputValue] = useState<string>("" );
   const [unreadCount, setUnreadCount] = useState<number>(0);
+
+  const dispatch = useAppDispatch();
+  const { messages, isLoading: isTyping } = useAppSelector((state) => state.ai);
 
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const prevMessagesLength = useRef(messages.length);
 
   // Auto-scroll to bottom of chat without affecting window or Lenis
   const scrollToBottom = (behavior: ScrollBehavior = "smooth") => {
@@ -217,9 +53,16 @@ export const AIAssistant: React.FC = () => {
     }
   }, [messages, isTyping]);
 
+  useEffect(() => {
+    if (!isOpen && messages.length > prevMessagesLength.current) {
+      setUnreadCount((c) => c + 1);
+    }
+    prevMessagesLength.current = messages.length;
+  }, [messages, isOpen]);
+
   const handleSendMessage = (textToSend?: string) => {
     const text = (textToSend || inputValue).trim();
-    if (!text) return;
+    if (!text || isTyping) return;
 
     // Handle special chip navigation commands
     if (text === "Scroll to Contact Form") {
@@ -243,35 +86,9 @@ export const AIAssistant: React.FC = () => {
       return;
     }
 
-    const userMessage: Message = {
-      id: `user-${Date.now()}`,
-      sender: "user",
-      text,
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-    };
-
-    setMessages((prev) => [...prev, userMessage]);
+    dispatch(addUserMessage(text));
     setInputValue("");
-    setIsTyping(true);
-
-    // Simulate smart thinking delay
-    setTimeout(() => {
-      const aiResponse = generateAIResponse(text);
-      const assistantMessage: Message = {
-        id: `ai-${Date.now()}`,
-        sender: "assistant",
-        text: aiResponse.reply,
-        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-        chips: aiResponse.chips,
-      };
-
-      setMessages((prev) => [...prev, assistantMessage]);
-      setIsTyping(false);
-
-      if (!isOpen) {
-        setUnreadCount((c) => c + 1);
-      }
-    }, 600);
+    dispatch(sendAIMessage(text));
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -282,7 +99,7 @@ export const AIAssistant: React.FC = () => {
   };
 
   const clearChat = () => {
-    setMessages(INITIAL_MESSAGES);
+    dispatch(clearMessages());
   };
 
   // Format assistant markdown text (bold, bullet points, headers)
