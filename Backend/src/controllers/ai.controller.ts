@@ -86,7 +86,7 @@ const aiAssistant = asyncHandler(async (req: Request, res: Response) => {
 
         // Call Gemini AI API via OpenAI compatibility endpoint
         const response = await openai.chat.completions.create({
-            model: process.env.GEMINI_MODEL || "gemini-2.5-flash",
+            model: process.env.GEMINI_MODEL || "gemini-3.5-flash-lite",
             messages: [
                 {
                     role: "system",
