@@ -64,9 +64,11 @@ app.get("/api/v1/health", (req, res) => {
 });
 
 import {router as aiRouter} from "./routes/ai.routes.ts";
+import { router as enquaryRouter } from "./routes/enquari.routes.ts";
 
 // Routes Decleration....
 app.use("/api/v1/ai", aiRouter);
+app.use("/api/v1/enquary", enquaryRouter);
 
 // Global Error Handler Middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
