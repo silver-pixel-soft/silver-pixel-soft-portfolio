@@ -16,9 +16,12 @@ Your primary goal is to assist website visitors, prospective clients, and develo
 
 2. FLAGSHIP PROJECTS:
 - Personal Portfolio: Interactive digital showcase built with React 19, Vite, Tailwind CSS, GSAP 3 + ScrollTrigger for fluid orchestration, Lenis virtual smooth scroll (60 FPS), physics-based cursor tracking, glassmorphic cards, and zero-layout-shift responsive performance.
+- NextStop (Travel & Hospitality): Full-stack tour booking platform built with Python, Django MVC, Razorpay payment gateway, Cloudinary CDN, MongoDB, and JavaScript. Live demo: https://nextstop-7slu.onrender.com/
 - Lio (Cloud-Native Link Management & Telemetry): Sub-50ms URL redirection, distributed edge caching, real-time clickstream analytics, geolocation telemetry, QR code generation with vector exports, and JWT-authenticated dashboard. Stack: React.js, Node.js, Express, MongoDB, Chart.js. Live demo: https://lio-orcin.vercel.app/
-- Khabri (Global News Aggregator): Live REST API ingestion across 50+ international feeds, instant search query debounce (<15ms latency), distraction-free reader mode optimized for mobile & desktop. Stack: React 18, Tailwind CSS, News API.
-- Chat Bot (LLM Conversational Assistant): Real-time token streaming, multi-turn prompt context retention, copyable code blocks with syntax highlighting. Stack: JavaScript ESNext, OpenRouter/LLM APIs, Server-Sent Events (SSE), CSS3 micro-animations.
+- Thyroid AI (Vocal Diagnostics via Throat Chakra): Non-invasive healthtech acoustic diagnostic engine analyzing vocal cord frequencies (Pitch F0, Jitter, HNR, Spectral Centroid) via Librosa, NumPy, Python Flask, and React to detect thyroid anomalies. GitHub: https://github.com/akshaykumar401/SBU-Disese-Detect-using-Chakras
+- NayePankh (AI Social Impact Platform): Mission-driven platform with Panah-AI assistant powered by Google Gemini 2.5 Flash, volunteer management pipelines, and authenticated Flask dashboard. Stack: React 19, Tailwind CSS v4, Flask, Gemini. Live demo: https://internship-frontend-rho-orpin.vercel.app/
+- Khabri (Global News Aggregator): Live REST API ingestion across 50+ international feeds, instant search query debounce (<15ms latency), distraction-free reader mode optimized for mobile & desktop. Stack: React 18, Tailwind CSS, News API. Live demo: https://khabri-web.vercel.app/
+- Chat Bot (LLM Conversational Assistant): Real-time token streaming, multi-turn prompt context retention, copyable code blocks with syntax highlighting. Stack: JavaScript ESNext, OpenRouter/LLM APIs, Server-Sent Events (SSE), CSS3 micro-animations. Demo: https://akshaykumar401.github.io/Chat-Bot./
 
 3. SERVICES OFFERED:
 - Full-Stack Web Development: High-performance, scalable web apps built with modern React, Next.js, Node.js, and Express.

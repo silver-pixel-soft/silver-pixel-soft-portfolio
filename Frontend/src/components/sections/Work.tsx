@@ -21,6 +21,8 @@ import lioImage from "../../assets/Lio.png";
 import khabriImage from "../../assets/Khabri.png";
 import chatBotImage from "../../assets/ChatBot.png";
 import NextStopImage from "../../assets/NextStop.png";
+import ThyroidImage from "../../assets/Throat.png";
+import AIWebImage from "../../assets/AI Web Dev.png";
 
 export interface ProjectMetric {
   label: string;
@@ -55,28 +57,28 @@ export const projectsData: ProjectItem[] = [
     title: "Personal Portfolio",
     category: "UI/UX Design",
     description:
-      "Award-winning interactive digital showcase with fluid micro-interactions, dark aesthetic, and smooth Lenis physics.",
+      "Award-winning interactive showcase featuring fluid GSAP animations, virtual inertial scrolling via Lenis, and physics-based cursor interactions.",
     detailedOverview:
-      "Engineered as a high-performance personal brand showcase featuring GSAP-powered motion orchestration, virtual inertial scrolling via Lenis, and custom interactive physics-based cursor trailing.",
-    tags: ["React 19", "GSAP", "Tailwind CSS", "Vite"],
+      "Engineered as a high-performance personal brand showcase featuring GSAP-powered timeline orchestration, virtual inertial scrolling via Lenis physics, interactive magnetic cursor tracking, glassmorphic UI elevations, and zero-layout-shift responsive performance.",
+    tags: ["React 19", "GSAP 3", "Lenis Scroll", "Tailwind CSS", "Vite", "TypeScript"],
     status: "Featured Showcase",
     image: portfolioImage,
-    categoryLabel: "Portfolio",
+    categoryLabel: "UI/UX & Motion",
     featured: true,
     role: "Lead UI Engineer & Designer",
-    completionYear: "2024",
+    completionYear: "2025",
     metrics: [
       { label: "Performance", value: "99/100" },
       { label: "Frame Rate", value: "60 FPS" },
-      { label: "Motion Engine", value: "GSAP 3" },
+      { label: "Motion Engine", value: "GSAP 3 + Lenis" },
     ],
     highlights: [
-      "Custom inertial smooth scroll with Lenis and GSAP ScrollTrigger synchronization",
-      "Reactive cursor tracking with physics-based lagging & magnetic button states",
-      "Accessible high-contrast dark theme with glassmorphic depth elevations",
-      "Zero-layout-shift responsive layout optimized for mobile and desktop screens",
+      "Virtual inertial smooth scroll synchronized with GSAP ScrollTrigger timelines and zero frame drops",
+      "Physics-based magnetic cursor tracking with spring dynamics and interactive hover attraction states",
+      "Accessible high-contrast dark aesthetic with layered glassmorphic depth elevations and ambient lighting",
+      "Zero-cumulative-layout-shift (CLS) architecture engineered for sub-second first contentful paint",
     ],
-    architecture: ["React 19", "GSAP Core + ScrollTrigger", "Lenis Physics", "Tailwind CSS", "Vite"],
+    architecture: ["React 19", "GSAP 3 Core & ScrollTrigger", "Lenis Physics", "Tailwind CSS", "Vite", "TypeScript"],
     links: [
       {
         name: "GitHub",
@@ -105,7 +107,7 @@ export const projectsData: ProjectItem[] = [
     completionYear: "2026",
     metrics: [
       { label: "Payment Gateway", value: "Razorpay" },
-      { label: "Media Engine", value: "Cloudinary CDN" },
+      { label: "Media Pipeline", value: "Cloudinary CDN" },
       { label: "Architecture", value: "Django MVC" },
     ],
     highlights: [
@@ -128,16 +130,16 @@ export const projectsData: ProjectItem[] = [
   },
   {
     id: "lio",
-    title: "Lio",
+    title: "Lio — Link Analytics & Telemetry",
     category: "Web Development",
     description:
-      "Cloud-native link management platform featuring real-time click stream analytics, geo-tracking, and sub-50ms redirection.",
+      "High-throughput link management and clickstream telemetry platform offering sub-50ms edge redirects, geo-analytics, and dynamic QR generation.",
     detailedOverview:
       "A production-grade SaaS URL shortening and telemetry platform built with distributed edge routing, granular clickstream analytics, geolocation heatmaps, and customizable QR code generation.",
-    tags: ["React", "Node.js", "Analytics", "REST API"],
+    tags: ["React", "Node.js", "Express", "MongoDB", "Chart.js", "REST API"],
     status: "Active SaaS",
     image: lioImage,
-    categoryLabel: "Lio",
+    categoryLabel: "Analytics & SaaS",
     featured: true,
     role: "Full Stack Developer",
     completionYear: "2026",
@@ -147,12 +149,12 @@ export const projectsData: ProjectItem[] = [
       { label: "Uptime SLA", value: "99.9%" },
     ],
     highlights: [
-      "Sub-50ms URL redirection pipeline with distributed edge caching",
-      "Interactive geo-location telemetry & clickstream funnel visual graphs",
-      "RESTful microservices architecture with JWT authentication & rate limiting",
-      "Dynamic QR code generator with vector export capabilities and analytics tracking",
+      "Sub-50ms URL redirection pipeline with distributed edge caching and low memory footprint",
+      "Interactive geo-location telemetry & clickstream funnel visual graphs powered by Chart.js",
+      "RESTful microservices architecture with JWT authentication, rate limiting, and audit logging",
+      "Dynamic QR code generator supporting custom vector SVG/PNG export with embedded tracking metadata",
     ],
-    architecture: ["React.js", "Node.js / Express", "MongoDB", "Chart.js / Analytics", "REST API"],
+    architecture: ["React.js", "Node.js / Express", "MongoDB Atlas", "Chart.js / Analytics", "REST API"],
     links: [
       {
         name: "GitHub",
@@ -165,19 +167,53 @@ export const projectsData: ProjectItem[] = [
     ],
   },
   {
+    id: "thyroid",
+    title: "Thyroid AI — Vocal Diagnostics",
+    category: "AI & Agents",
+    description:
+      "Non-invasive acoustic diagnostic platform analyzing vocal cord frequency biomarkers and throat chakra indicators to detect thyroid disorders.",
+    detailedOverview:
+      "An acoustic intelligence healthcare application combining a React frontend with a Python Flask signal-processing engine. It captures vocal cord biometric samples and computes acoustic biomarkers—including Pitch (F0), Jitter, Hoarseness (HNR), and Spectral Centroid via Librosa—to screen for thyroid anomalies.",
+    tags: ["Python", "Flask", "Librosa", "Audio DSP", "NumPy", "React", "Google API"],
+    status: "AI Diagnostic Engine",
+    image: ThyroidImage,
+    categoryLabel: "HealthTech AI",
+    featured: true,
+    role: "Lead ML & Systems Engineer",
+    completionYear: "2026",
+    metrics: [
+      { label: "Biomarkers", value: "Pitch, Jitter, HNR" },
+      { label: "DSP Engine", value: "Librosa & NumPy" },
+      { label: "API Latency", value: "<200ms Processing" },
+    ],
+    highlights: [
+      "In-browser high-precision microphone audio recording with direct waveform spectrogram capture",
+      "Acoustic biomarker extraction pipeline computing fundamental frequency (F0), jitter, and Harmonic-to-Noise Ratio (HNR)",
+      "Decoupled Python Flask microservice processing complex audio transforms via Librosa and NumPy",
+      "Automated synchronization with Google Sheets API for clinical record keeping and medical audit trails",
+    ],
+    architecture: ["Python 3", "Flask & Flask-CORS", "Librosa Audio DSP", "NumPy", "React (Vite)", "Tailwind CSS", "Google Sheets API"],
+    links: [
+      {
+        name: "GitHub",
+        url: "https://github.com/akshaykumar401/SBU-Disese-Detect-using-Chakras",
+      },
+    ],
+  },
+  {
     id: "khabri",
-    title: "Khabri",
+    title: "Khabri — Global News Wire",
     category: "Web Development",
     description:
-      "Curated content delivery application aggregating global news categories with instant filtering and responsive reader mode.",
+      "Real-time global news aggregation portal with debounced multi-category querying, bookmarking, and a distraction-free responsive reader experience.",
     detailedOverview:
-      "A high-velocity content aggregation platform that pulls real-time headlines across international news wire feeds, with instantaneous category filtering, query debounce, and a high-readability distraction-free reader mode.",
-    tags: ["React", "News API", "Tailwind", "Responsive"],
-    status: "Live App",
+      "A high-speed content delivery web application consuming live international news feeds across multiple categories and languages. Engineered with client-side query debounce, instantaneous source filtering, offline bookmark persistence, and zero-layout-shift image skeleton loaders.",
+    tags: ["React 18", "News API", "Tailwind CSS", "Vite", "JavaScript"],
+    status: "Live Application",
     image: khabriImage,
-    categoryLabel: "Khabri",
+    categoryLabel: "Content & Media",
     featured: false,
-    role: "Frontend Developer",
+    role: "Frontend Engineer",
     completionYear: "2025",
     metrics: [
       { label: "Global Sources", value: "50+ Feeds" },
@@ -185,12 +221,12 @@ export const projectsData: ProjectItem[] = [
       { label: "Reader UX", value: "Distraction-Free" },
     ],
     highlights: [
-      "Live REST API feed ingestion with category & regional query parameters",
-      "Distraction-free clean reader layout optimized for mobile & desktop reading",
-      "Stateful bookmarking and debounced search across hundreds of headlines",
-      "Zero-layout-shift image skeleton loaders with fallback caching",
+      "Live REST API feed ingestion filtering international news, business, technology, and entertainment",
+      "Distraction-free clean reader layout optimized for high readability across mobile and desktop screens",
+      "Debounced search architecture delivering instant headline filtering with sub-15ms response times",
+      "Persistent stateful bookmarking with zero-layout-shift image skeleton loaders and fallback caching",
     ],
-    architecture: ["React 18", "News API Ingestion", "Tailwind CSS", "Debounced Search", "Vite"],
+    architecture: ["React 18", "News API Ingestion", "Tailwind CSS", "Debounced Search", "Vite Bundler"],
     links: [
       {
         name: "GitHub",
@@ -203,32 +239,70 @@ export const projectsData: ProjectItem[] = [
     ],
   },
   {
-    id: "chatbot",
-    title: "Chat Bot",
+    id: "ai_web",
+    title: "NayePankh — AI Social Impact",
     category: "AI & Agents",
     description:
-      "Intelligent conversational assistant powered by large language models, streaming markdown responses with context retention.",
+      "Full-stack social welfare platform featuring the Panah-AI multilingual chatbot powered by Google Gemini, volunteer pipelines, and an admin command center.",
     detailedOverview:
-      "An AI-powered conversational web application delivering streaming responses with syntax-highlighted code blocks, context memory, and customizable system prompt personas.",
-    tags: ["AI / LLM", "JavaScript", "NLP", "API Integration"],
-    status: "AI Model Deployed",
+      "A mission-driven social impact platform built for NayePankh Foundation. Features a responsive React 19 frontend with Tailwind CSS v4 bento grids, the Panah-AI conversational assistant powered by Google Gemini 2.5 Flash, an automated changemaker onboarding pipeline, and a secure session-authenticated Flask admin management console.",
+    tags: ["React 19", "Python Flask", "Gemini 2.5 Flash", "Tailwind CSS v4", "MongoDB", "AI Chatbot"],
+    status: "Production Platform",
+    image: AIWebImage,
+    categoryLabel: "Social Impact AI",
+    featured: false,
+    role: "Full Stack & AI Engineer",
+    completionYear: "2026",
+    metrics: [
+      { label: "AI Engine", value: "Gemini 2.5 Flash" },
+      { label: "Volunteer Pipeline", value: "Automated" },
+      { label: "Admin Security", value: "Session Auth" },
+    ],
+    highlights: [
+      "Panah-AI conversational assistant powered by Google Gemini 2.5 Flash with intelligent rule-based prompt caching",
+      "Responsive bento-grid user experience engineered with React 19, Tailwind CSS v4, and interactive micro-animations",
+      "Session-authenticated administration dashboard for volunteer application review, search, and analytics",
+      "Decoupled client-server architecture with high-concurrency Python Flask REST endpoints and database persistence",
+    ],
+    architecture: ["React 19", "Python Flask", "Google Gemini 2.5 Flash", "Tailwind CSS v4", "React Router v7", "MongoDB Atlas"],
+    links: [
+      {
+        name: "GitHub",
+        url: "https://github.com/akshaykumar401/AI-Web-Devlopment--Internship-2026--By-NayePankh-Foundation",
+      },
+      {
+        name: "Live Demo",
+        url: "https://internship-frontend-rho-orpin.vercel.app/",
+      },
+    ],
+  },
+  {
+    id: "chatbot",
+    title: "Chat Bot — Conversational AI",
+    category: "AI & Agents",
+    description:
+      "Streaming conversational assistant powered by large language models, featuring syntax-highlighted code blocks, context memory, and customizable personas.",
+    detailedOverview:
+      "An AI conversational web application delivering low-latency token streaming, multi-turn prompt context retention, and copyable markdown code blocks with prism syntax highlighting. Includes customizable prompt personas and responsive chat bubble animations.",
+    tags: ["AI / LLM", "JavaScript", "SSE Streaming", "NLP", "API Integration", "CSS3"],
+    status: "Live AI Model",
     image: chatBotImage,
-    categoryLabel: "Chat Bot",
+    categoryLabel: "Conversational AI",
     featured: false,
     role: "AI & Frontend Engineer",
     completionYear: "2025",
     metrics: [
       { label: "Response Mode", value: "Token Stream" },
-      { label: "Context Window", value: "Multi-turn" },
+      { label: "Context Window", value: "Multi-Turn" },
       { label: "Code Highlighting", value: "Markdown & Prism" },
     ],
     highlights: [
-      "Real-time token streaming with automatic scroll-to-bottom anchor",
+      "Real-time Server-Sent Events (SSE) token streaming with automatic scroll-to-bottom anchor",
       "Rich markdown syntax formatting with copyable code snippets and syntax highlighting",
-      "Session history management with multi-turn prompt context retention",
-      "Adaptive chat bubble rendering with conversational typing indicators",
+      "Session history management with multi-turn prompt context retention and persona directives",
+      "Adaptive chat bubble rendering with conversational typing indicators and smooth micro-animations",
     ],
-    architecture: ["JavaScript (ESNext)", "LLM / OpenRouter API", "SSE Streaming", "CSS3 Animations"],
+    architecture: ["JavaScript (ESNext)", "LLM / OpenRouter API", "SSE Streaming", "Prism.js", "CSS3 Animations"],
     links: [
       {
         name: "GitHub",
