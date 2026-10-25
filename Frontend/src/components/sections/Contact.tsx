@@ -1,16 +1,21 @@
 import { useRef, useState } from "react";
-import { Mail, MapPin, Phone, ChevronDown, Send, CheckCircle2, Clock, Copy, Check } from "lucide-react";
+import { Mail, MapPin, Phone, ChevronDown, Send, CheckCircle2, Clock, Copy, Check, Loader2, AlertCircle, X } from "lucide-react";
 import { SectionHeading } from "../ui/SectionHeading";
 import { Button } from "../ui/Button";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+import { submitEnquary, resetEnquaryStatus, clearEnquaryError } from "../../features/enquary/enquary.slice";
 
 const Contact = () => {
   const containerRef = useRef<HTMLElement>(null);
   const leftColRef = useRef<HTMLDivElement>(null);
   const rightColRef = useRef<HTMLDivElement>(null);
+
+  const dispatch = useAppDispatch();
+  const { isLoading, isSuccess, error } = useAppSelector((state) => state.enquary);
+
   const [copiedEmail, setCopiedEmail] = useState(false);
-  const [formSubmitted, setFormSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -26,33 +31,60 @@ const Contact = () => {
     setTimeout(() => setCopiedEmail(false), 2000);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleResetForm = () => {
+    dispatch(resetEnquaryStatus());
+    setFormData({
+      firstName: "",
+      lastName: "",
+      email: "",
+      service: "",
+      budget: "",
+      message: ""
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.email || !formData.firstName) return;
-    setFormSubmitted(true);
 
-    try {
-      const stored = localStorage.getItem("sps_admin_requests");
-      const currentList = stored ? JSON.parse(stored) : [];
-      const newInquiry = {
-        id: `req-${Date.now().toString().slice(-4)}`,
-        clientName: `${formData.firstName} ${formData.lastName}`.trim(),
-        company: "Direct Inbound Lead",
-        email: formData.email,
-        service: formData.service || "Web Development",
-        budget: formData.budget || "$10,000 - $25,000",
-        timeline: "2 - 4 Weeks",
-        status: "pending",
-        date: "Just now",
-        description: formData.message || "Client submitted inquiry through homepage contact form.",
-        estimatedValue: 18000,
-        avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
-      };
-      localStorage.setItem("sps_admin_requests", JSON.stringify([newInquiry, ...currentList]));
-    } catch {
-      // ignore
+    const payload = {
+      firstName: formData.firstName.trim(),
+      lastName: (formData.lastName.trim() || formData.firstName.trim()),
+      email: formData.email.trim(),
+      serviceNeeded: formData.service || "Web Application (React / Next.js)",
+      budget: formData.budget || "₹15,000 - ₹30,000",
+      message: formData.message.trim() || "Inquiry submitted through website contact form.",
+    };
+
+    // Dispatch async thunk via Redux
+    const resultAction = await dispatch(submitEnquary(payload));
+
+    if (submitEnquary.fulfilled.match(resultAction)) {
+      // Sync with local storage admin mock for consistent preview
+      try {
+        const stored = localStorage.getItem("sps_admin_requests");
+        const currentList = stored ? JSON.parse(stored) : [];
+        const newInquiry = {
+          id: `req-${Date.now().toString().slice(-4)}`,
+          clientName: `${payload.firstName} ${formData.lastName}`.trim(),
+          company: "Direct Inbound Lead",
+          email: payload.email,
+          service: payload.serviceNeeded,
+          budget: payload.budget,
+          timeline: "2 - 4 Weeks",
+          status: "pending",
+          date: "Just now",
+          description: payload.message,
+          estimatedValue: 18000,
+          avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+        };
+        localStorage.setItem("sps_admin_requests", JSON.stringify([newInquiry, ...currentList]));
+      } catch {
+        // ignore
+      }
     }
   };
+
 
   useGSAP(() => {
     const tl = gsap.timeline({
@@ -183,7 +215,7 @@ const Contact = () => {
           ref={rightColRef}
           className="lg:col-span-7 bg-[#090d18]/90 border border-white/[0.1] rounded-3xl p-8 sm:p-10 shadow-2xl backdrop-blur-xl relative"
         >
-          {formSubmitted ? (
+          {isSuccess ? (
             <div className="py-16 text-center space-y-4">
               <div className="h-16 w-16 rounded-full bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mx-auto animate-bounce">
                 <CheckCircle2 className="w-8 h-8" />
@@ -193,7 +225,7 @@ const Contact = () => {
                 Thank you, <span className="text-white font-semibold">{formData.firstName}</span>. Our technical team has received your project briefing and will follow up at <span className="text-sky-400 font-mono">{formData.email}</span> within 24 hours.
               </p>
               <button
-                onClick={() => setFormSubmitted(false)}
+                onClick={handleResetForm}
                 className="mt-4 px-6 py-2 rounded-xl bg-white/10 text-white text-xs font-semibold hover:bg-white/20 transition-colors"
               >
                 Send Another Message
@@ -201,6 +233,24 @@ const Contact = () => {
             </div>
           ) : (
             <form className="space-y-6" onSubmit={handleSubmit}>
+              {/* Error Notification Banner */}
+              {error && (
+                <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center justify-between gap-3 animate-in fade-in">
+                  <div className="flex items-center gap-2.5">
+                    <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+                    <span>{error}</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => dispatch(clearEnquaryError())}
+                    className="p-1 hover:bg-rose-500/20 rounded-md text-rose-400 transition-colors"
+                    title="Dismiss"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
+
               <div className="grid md:grid-cols-2 gap-5">
                 <div className="space-y-2">
                   <label className="text-xs font-semibold text-neutral-300 uppercase tracking-wider">
@@ -218,10 +268,11 @@ const Contact = () => {
 
                 <div className="space-y-2">
                   <label className="text-xs font-semibold text-neutral-300 uppercase tracking-wider">
-                    Last Name
+                    Last Name <span className="text-sky-400">*</span>
                   </label>
                   <input
                     type="text"
+                    required
                     value={formData.lastName}
                     onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                     placeholder="e.g. Verma"
@@ -247,19 +298,21 @@ const Contact = () => {
               <div className="grid md:grid-cols-2 gap-5">
                 <div className="space-y-2">
                   <label className="text-xs font-semibold text-neutral-300 uppercase tracking-wider">
-                    Service of Interest
+                    Service of Interest <span className="text-sky-400">*</span>
                   </label>
                   <div className="relative">
                     <select
+                      required
                       value={formData.service}
                       onChange={(e) => setFormData({ ...formData, service: e.target.value })}
                       className="w-full bg-[#050812] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all cursor-pointer appearance-none"
                     >
                       <option value="">Select a service...</option>
-                      <option value="web">Web Application (React/Next.js)</option>
-                      <option value="mobile">Mobile App (React Native/iOS/Android)</option>
-                      <option value="software">Custom Enterprise Software / AI</option>
-                      <option value="uiux">UI/UX & Product Design</option>
+                      <option value="Web Application (React / Next.js)">Web Application (React / Next.js)</option>
+                      <option value="Mobile App (React Native / iOS / Android)">Mobile App (React Native / iOS / Android)</option>
+                      <option value="Custom Enterprise Software / AI">Custom Enterprise Software / AI</option>
+                      <option value="UI/UX & Product Design">UI/UX & Product Design</option>
+                      <option value="Full-Stack SaaS Architecture">Full-Stack SaaS Architecture</option>
                     </select>
                     <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 pointer-events-none" />
                   </div>
@@ -267,20 +320,21 @@ const Contact = () => {
 
                 <div className="space-y-2">
                   <label className="text-xs font-semibold text-neutral-300 uppercase tracking-wider">
-                    Expected Budget
+                    Expected Budget <span className="text-sky-400">*</span>
                   </label>
                   <div className="relative">
                     <select
+                      required
                       value={formData.budget}
                       onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
                       className="w-full bg-[#050812] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all cursor-pointer appearance-none"
                     >
                       <option value="">Select your budget range...</option>
-                      <option value="under15k">Under ₹15,000</option>
-                      <option value="15k-30k">₹15,000 - ₹30,000</option>
-                      <option value="30k-60k">₹30,000 - ₹60,000</option>
-                      <option value="60k-1lakh">₹60,000 - ₹1,00,000</option>
-                      <option value="1lakh+">₹1,00,000+ (Enterprise)</option>
+                      <option value="Under 15,000">Under ₹15,000</option>
+                      <option value="15,000 - 30,000">₹15,000 - ₹30,000</option>
+                      <option value="30,000 - 60,000">₹30,000 - ₹60,000</option>
+                      <option value="60,000 - 1,00,000">₹60,000 - ₹1,00,000</option>
+                      <option value="1,00,000+ (Enterprise)">₹1,00,000+ (Enterprise)</option>
                     </select>
                     <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 pointer-events-none" />
                   </div>
@@ -289,10 +343,11 @@ const Contact = () => {
 
               <div className="space-y-2">
                 <label className="text-xs font-semibold text-neutral-300 uppercase tracking-wider">
-                  Project Overview & Goals
+                  Project Overview & Goals <span className="text-sky-400">*</span>
                 </label>
                 <textarea
                   rows={4}
+                  required
                   value={formData.message}
                   onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                   placeholder="Tell us about what you want to build, target users, desired timeline, or any reference websites..."
@@ -302,10 +357,20 @@ const Contact = () => {
 
               <Button
                 type="submit"
-                className="w-full py-4 rounded-xl text-base font-bold shadow-xl shadow-sky-500/20 gap-2"
+                disabled={isLoading}
+                className="w-full py-4 rounded-xl text-base font-bold shadow-xl shadow-sky-500/20 gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                <span>Send Project Inquiry</span>
-                <Send className="w-4 h-4" />
+                {isLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Transmitting Inquiry...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>Send Project Inquiry</span>
+                    <Send className="w-4 h-4" />
+                  </>
+                )}
               </Button>
             </form>
           )}

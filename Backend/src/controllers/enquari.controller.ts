@@ -41,9 +41,10 @@ const enquaryController = asyncHandler(async (req: Request, res: Response) => {
           "Enquary created successfully"
         )
       );
-  } catch (error) {
-    throw new ApiError(400, "Failed to create enquary");
+  } catch (error: any) {
+    throw new ApiError(error?.statusCode || 400, error?.message || "Failed to create enquary");
   }
 });
 
 export { enquaryController };
+

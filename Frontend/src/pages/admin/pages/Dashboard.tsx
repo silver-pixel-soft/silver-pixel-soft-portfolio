@@ -44,6 +44,8 @@ export const Dashboard: React.FC<DashboardProps> = ({ onLogout }) => {
 
   // Requests state
   const [requests, setRequests] = useState<ProjectRequest[]>(() => getStoredRequests());
+
+
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [selectedService, setSelectedService] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
