@@ -1,5 +1,3 @@
-import nodemailer, { type Transporter } from 'nodemailer';
-
 interface EmailOptions {
   firstName: string;
   lastName: string;
@@ -10,23 +8,16 @@ interface EmailOptions {
 }
 
 async function sendEmail({ firstName, lastName, email, serviceNeeded, budget, message }: EmailOptions): Promise<boolean> {
-  // 1. Create a transporter with type definition
-  const transporter: Transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
+  const mailServiceUrl: string = process.env.MAIL_SERVICE_URL || "";
+  const recipient: string = process.env.DEFAULT_EMAIL_RECEPITENT || "";
+  const subject: string = `Enquiry Mail From ${firstName} for ${serviceNeeded}`;
 
-  // 2. Define the mail options
-  const mailOptions = {
-    from: "Silver Pixel Soft * Enquiry System",
-    to: process.env.DEFAULT_EMAIL_RECEPITENT,
-    subject: `Enquiry Mail From ${firstName} ${lastName} for ${serviceNeeded}`,
-    html: `
+  if (!mailServiceUrl || !recipient) {
+    console.error("Missing MAIL_SERVICE_URL or DEFAULT_EMAIL_RECEPITENT configuration");
+    return false;
+  }
+
+  const html = `
     <div style="margin: 0; padding: 0; background-color: #f4f6f9; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #333333; -webkit-font-smoothing: antialiased;">
   <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f4f6f9; padding: 40px 0;">
     <tr>
@@ -130,16 +121,31 @@ async function sendEmail({ firstName, lastName, email, serviceNeeded, budget, me
     </tr>
   </table>
 </div>
-  `
-  };
+  `;
 
-  // 3. Send mail with error handling
   try {
-    const info = await transporter.sendMail(mailOptions);
-    console.log("Email sent successfully: %s", info.messageId);
+    const response = await fetch(mailServiceUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        recipients: recipient,
+        subject,
+        body: html,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`Mail service responded with error (status ${response.status}):`, errorText);
+      return false;
+    }
+
+    const data = await response.json();
     return true;
   } catch (error) {
-    console.error("Failed to send email:", error);
+    console.error("Failed to send email via mail service:", error);
     return false;
   }
 }
