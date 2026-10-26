@@ -8,9 +8,24 @@ const useScrollToSection = () => {
     (sectionId: string) => {
       navigate("/");
       setTimeout(() => {
+        const lenis = (window as any).lenis;
+        if (sectionId === "home") {
+          if (lenis) {
+            lenis.scrollTo(0, { duration: 1.2 });
+          } else {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }
+          return;
+        }
+
         const element = document.getElementById(sectionId);
         if (element) {
-          element.scrollIntoView({ behavior: "smooth", block: "start" });
+          if (lenis) {
+            lenis.scrollTo(element, { offset: -80, duration: 1.2 });
+          } else {
+            const y = element.getBoundingClientRect().top + window.scrollY - 80;
+            window.scrollTo({ top: y, behavior: "smooth" });
+          }
         }
       }, 100);
     },

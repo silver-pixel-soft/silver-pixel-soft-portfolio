@@ -42,6 +42,7 @@ const App = () => {
     });
 
     lenisRef.current = lenis;
+    (window as any).lenis = lenis;
 
     // Connect Lenis to ScrollTrigger
     lenis.on("scroll", ScrollTrigger.update);
@@ -62,6 +63,7 @@ const App = () => {
       clearTimeout(timer);
       gsap.ticker.remove(tickerCallback);
       lenis.destroy();
+      (window as any).lenis = null;
     };
   }, []);
 

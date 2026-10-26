@@ -53,7 +53,7 @@ const Hero = () => {
     <section
       id="home"
       ref={containerRef}
-      className="relative flex min-h-[92vh] w-full flex-col justify-center px-4 sm:px-6 lg:px-20 mx-auto max-w-7xl overflow-hidden pt-12 pb-20"
+      className="relative flex min-h-[92vh] w-full flex-col justify-center px-4 sm:px-6 lg:px-20 mx-auto max-w-7xl overflow-hidden pt-28 pb-20"
     >
       {/* Background Cyber Grid */}
       <div

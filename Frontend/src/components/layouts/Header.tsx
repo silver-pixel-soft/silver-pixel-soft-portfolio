@@ -14,6 +14,7 @@ const Header = () => {
   const headerRef = useRef<HTMLElement>(null);
   const tl = useRef<gsap.core.Timeline | null>(null);
   const isMobileMenuOpenRef = useRef(isMobileMenuOpen);
+  const showAnimRef = useRef<gsap.core.Tween | null>(null);
 
   useEffect(() => {
     isMobileMenuOpenRef.current = isMobileMenuOpen;
@@ -21,9 +22,15 @@ const Header = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      const isScrolled = window.scrollY > 20;
+      setScrolled(isScrolled);
+      // Guarantee: when at top of page, always ensure header is fully visible
+      if (window.scrollY <= 10 && headerRef.current) {
+        gsap.to(headerRef.current, { yPercent: 0, duration: 0.2, overwrite: "auto" });
+      }
     };
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -38,6 +45,9 @@ const Header = () => {
   ];
 
   const handleNavClick = (id: string) => {
+    if (headerRef.current) {
+      gsap.to(headerRef.current, { yPercent: 0, duration: 0.25, overwrite: "auto" });
+    }
     scrollToSection(id);
     setIsMobileMenuOpen(false);
   };
@@ -62,45 +72,84 @@ const Header = () => {
       );
   }, { scope: menuRef });
 
+  // Handle Lenis stop/start and body lock when mobile menu toggles
   useGSAP(() => {
+    const lenis = (window as any).lenis;
     if (isMobileMenuOpen) {
       tl.current?.play();
       document.body.style.overflow = "hidden";
+      lenis?.stop();
     } else {
       tl.current?.reverse();
       document.body.style.overflow = "";
+      lenis?.start();
     }
   }, [isMobileMenuOpen]);
 
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = "";
+      (window as any).lenis?.start();
+    };
+  }, []);
+
+  // Header hide-on-scroll-down, show-on-scroll-up with guarantee at page top
   useGSAP(() => {
     if (!headerRef.current) return;
 
-    const showAnim = gsap.from(headerRef.current, {
+    gsap.set(headerRef.current, { yPercent: 0 });
+
+    const showAnim = gsap.to(headerRef.current, {
       yPercent: -100,
       paused: true,
-      duration: 0.35,
-      ease: "power3.out"
-    }).progress(1);
+      duration: 0.3,
+      ease: "power2.out",
+    });
+    showAnimRef.current = showAnim;
 
-    ScrollTrigger.create({
-      start: "top top-=" + 80,
+    const trigger = ScrollTrigger.create({
+      start: "top top-=80",
       end: 99999,
       onUpdate: (self) => {
         if (isMobileMenuOpenRef.current) return;
-        if (self.direction === 1) {
-          showAnim.reverse();
-        } else {
-          showAnim.play();
+
+        // When at top or near top, always keep header visible
+        if (self.scroll() <= 60) {
+          showAnim.reverse(); // reverse to yPercent 0
+          return;
         }
-      }
+
+        // Scroll down -> hide header
+        if (self.direction === 1) {
+          showAnim.play(); // play to yPercent -100
+        }
+        // Scroll up -> show header
+        else if (self.direction === -1) {
+          showAnim.reverse(); // reverse to yPercent 0
+        }
+      },
+      onLeaveBack: () => {
+        // Crucial fix: when scrolling back past start to the top of the page
+        showAnim.reverse();
+      },
+      onRefresh: () => {
+        if (window.scrollY <= 60) {
+          showAnim.reverse();
+        }
+      },
     });
+
+    return () => {
+      trigger.kill();
+      showAnim.kill();
+    };
   }, []);
 
   return (
     <>
       <header
         ref={headerRef}
-        className={`sticky top-0 z-50 w-full transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 w-full transition-[background-color,border-color,box-shadow,backdrop-filter] duration-300 ${
           scrolled
             ? "border-b border-white/[0.08] bg-[#030712]/80 backdrop-blur-xl shadow-2xl shadow-black/40"
             : "border-b border-transparent bg-transparent"
@@ -110,7 +159,7 @@ const Header = () => {
           {/* Brand Logo */}
           <div
             className="flex cursor-pointer items-center gap-3.5 group"
-            onClick={() => scrollToSection("home")}
+            onClick={() => handleNavClick("home")}
           >
             <div className="relative flex h-10 w-10 items-center justify-center">
               <div className="absolute inset-0 bg-sky-500/25 rounded-full blur-md opacity-60 group-hover:opacity-100 group-hover:scale-125 transition-all duration-300" />
@@ -137,7 +186,7 @@ const Header = () => {
                 <li
                   key={item.id}
                   className="cursor-pointer rounded-full px-4 py-1.5 transition-all duration-200 hover:text-white hover:bg-white/[0.06] active:scale-95"
-                  onClick={() => scrollToSection(item.id)}
+                  onClick={() => handleNavClick(item.id)}
                 >
                   {item.name}
                 </li>
@@ -156,7 +205,7 @@ const Header = () => {
             </div>
 
             <Button
-              onClick={() => scrollToSection("contact")}
+              onClick={() => handleNavClick("contact")}
               size="sm"
               className="gap-1.5 shadow-lg shadow-sky-500/20"
             >
@@ -177,14 +226,24 @@ const Header = () => {
         </div>
       </header>
 
+      {/* Mobile Backdrop Overlay */}
+      {isMobileMenuOpen && (
+        <div
+          data-lenis-prevent="true"
+          className="fixed inset-0 z-[95] bg-black/60 backdrop-blur-sm md:hidden"
+          onClick={() => setIsMobileMenuOpen(false)}
+        />
+      )}
+
       {/* Mobile Slide-in Drawer */}
       <div
         ref={menuRef}
+        data-lenis-prevent="true"
         style={{ display: "none", opacity: 0 }}
-        className="fixed top-0 right-0 z-[100] h-screen w-full max-w-[100vw] sm:w-[420px] border-l border-white/10 bg-[#060a12]/95 backdrop-blur-2xl md:hidden flex-col shadow-2xl"
+        className="fixed top-0 right-0 z-[100] h-screen w-full max-w-[100vw] sm:w-[420px] border-l border-white/10 bg-[#060a12]/95 backdrop-blur-2xl md:hidden flex flex-col shadow-2xl overscroll-contain touch-pan-y"
       >
         {/* Drawer Header */}
-        <div className="flex h-20 items-center justify-between px-8 border-b border-white/5">
+        <div className="flex h-20 items-center justify-between px-8 border-b border-white/5 shrink-0">
           <div className="flex items-center gap-3">
             <div className="h-9 w-9 rounded-xl bg-white/[0.06] border border-white/10 p-1 flex items-center justify-center overflow-hidden shadow-inner">
               <img src="/SPS.png" alt="Silver Pixel Soft Logo" className="h-full w-full object-contain" />
@@ -204,7 +263,10 @@ const Header = () => {
         </div>
 
         {/* Drawer Links */}
-        <div className="flex flex-1 flex-col justify-between px-8 py-10 overflow-y-auto">
+        <div
+          data-lenis-prevent="true"
+          className="flex flex-1 flex-col justify-between px-8 py-10 overflow-y-auto overscroll-contain"
+        >
           <ul className="flex flex-col gap-5 text-2xl font-bold tracking-tight text-white">
             {navItems.map((item) => (
               <li
