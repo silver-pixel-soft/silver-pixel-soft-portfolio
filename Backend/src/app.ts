@@ -56,19 +56,21 @@ app.use(cookieParser());
 
 // Importing all Routes...
 app.get("/api/v1/health", (req, res) => {
-  res.json({ 
-    status: "success", 
+  res.json({
+    status: "success",
     message: "Server is live",
     timestamp: new Date().toISOString()
   });
 });
 
-import {router as aiRouter} from "./routes/ai.routes.ts";
+import { router as aiRouter } from "./routes/ai.routes.ts";
 import { router as enquaryRouter } from "./routes/enquari.routes.ts";
+import { router as reviewRouter } from "./routes/review.routes.ts";
 
 // Routes Decleration....
 app.use("/api/v1/ai", aiRouter);
 app.use("/api/v1/enquary", enquaryRouter);
+app.use("/api/v1/review", reviewRouter);
 
 // Global Error Handler Middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
