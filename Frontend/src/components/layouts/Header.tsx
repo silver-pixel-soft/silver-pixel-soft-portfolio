@@ -78,18 +78,25 @@ const Header = () => {
     if (isMobileMenuOpen) {
       tl.current?.play();
       document.body.style.overflow = "hidden";
-      lenis?.stop();
+      if (typeof lenis?.stop === "function") {
+        lenis.stop();
+      }
     } else {
       tl.current?.reverse();
       document.body.style.overflow = "";
-      lenis?.start();
+      if (typeof lenis?.start === "function") {
+        lenis.start();
+      }
     }
   }, [isMobileMenuOpen]);
 
   useEffect(() => {
     return () => {
       document.body.style.overflow = "";
-      (window as any).lenis?.start();
+      const lenis = (window as any).lenis;
+      if (typeof lenis?.start === "function") {
+        lenis.start();
+      }
     };
   }, []);
 

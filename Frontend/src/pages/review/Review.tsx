@@ -69,6 +69,8 @@ const Review: React.FC = () => {
       smoothWheel: true,
     });
 
+    (window as any).lenis = lenis;
+
     const raf = (time: number) => {
       lenis.raf(time * 1000);
     };
@@ -79,6 +81,7 @@ const Review: React.FC = () => {
     return () => {
       gsap.ticker.remove(raf);
       lenis.destroy();
+      (window as any).lenis = null;
     };
   }, []);
 

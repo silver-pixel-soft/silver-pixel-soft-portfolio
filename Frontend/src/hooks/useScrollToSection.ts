@@ -10,7 +10,7 @@ const useScrollToSection = () => {
       setTimeout(() => {
         const lenis = (window as any).lenis;
         if (sectionId === "home") {
-          if (lenis) {
+          if (typeof lenis?.scrollTo === "function") {
             lenis.scrollTo(0, { duration: 1.2 });
           } else {
             window.scrollTo({ top: 0, behavior: "smooth" });
@@ -20,7 +20,7 @@ const useScrollToSection = () => {
 
         const element = document.getElementById(sectionId);
         if (element) {
-          if (lenis) {
+          if (typeof lenis?.scrollTo === "function") {
             lenis.scrollTo(element, { offset: -80, duration: 1.2 });
           } else {
             const y = element.getBoundingClientRect().top + window.scrollY - 80;
