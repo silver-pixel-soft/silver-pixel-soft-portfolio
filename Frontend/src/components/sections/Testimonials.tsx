@@ -1,5 +1,8 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { type AppDispatch, type RootState } from "../../app/Store";
+import { fetchReviews } from "../../features/review/review.slice";
 import {
   Star,
   Quote,
@@ -14,7 +17,6 @@ import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import {
   getMergedReviews,
-  type ReviewItem,
 } from "../../pages/review/reviewData";
 
 const Testimonials = () => {
@@ -22,23 +24,16 @@ const Testimonials = () => {
   const cardsRef = useRef<HTMLDivElement[]>([]);
   const navigate = useNavigate();
 
-  // Load blended reviews (both verified initial and user-submitted from localStorage)
-  const [reviewsList, setReviewsList] = useState<ReviewItem[]>(() =>
-    getMergedReviews()
-  );
+  const dispatch = useDispatch<AppDispatch>();
+  const { reviews } = useSelector((state: RootState) => state.review);
 
   useEffect(() => {
-    // Refresh reviews on mount or storage update
-    setReviewsList(getMergedReviews());
-    const handleStorage = () => {
-      setReviewsList(getMergedReviews());
-    };
-    window.addEventListener("storage", handleStorage);
-    return () => window.removeEventListener("storage", handleStorage);
-  }, []);
+    dispatch(fetchReviews());
+  }, [dispatch]);
 
-  // Display top 3 reviews on homepage
-  const displayedReviews = reviewsList.slice(0, 3);
+  // Display top 3 reviews on homepage (from Redux or fallback)
+  const allReviews = reviews && reviews.length > 0 ? reviews : getMergedReviews();
+  const displayedReviews = allReviews.slice(0, 3);
 
   useGSAP(
     () => {
@@ -74,99 +69,118 @@ const Testimonials = () => {
         description="Don't just take our word for it. Here is genuine feedback from startup founders and engineering leaders who partnered with Silver Pixel Soft."
       />
 
-      {/* Reviews Grid (Exactly 3 reviews) */}
-      <div className="grid md:grid-cols-3 gap-8 relative z-10">
-        {displayedReviews.map((t, index) => (
-          <div
-            key={t.id || index}
-            ref={(el) => {
-              if (el) cardsRef.current[index] = el;
-            }}
-            className={`group relative rounded-3xl bg-[#090d18] border p-8 flex flex-col justify-between hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 ${
-              t.isNew
-                ? "border-cyan-400/50 shadow-[0_0_20px_rgba(34,211,238,0.15)]"
-                : "border-white/[0.08] hover:border-sky-500/40"
-            }`}
-          >
-            {/* If New Client Review */}
-            {t.isNew && (
-              <div className="absolute -top-3 right-6 bg-gradient-to-r from-indigo-500 to-cyan-400 text-white text-[9px] font-mono font-extrabold uppercase px-2.5 py-0.5 rounded-full shadow-md">
-                RECENT REVIEW
-              </div>
-            )}
-
-            <div>
-              {/* Category pill & Metric badge */}
-              <div className="flex items-center justify-between gap-2 mb-5">
-                <span className="text-[11px] font-mono px-3 py-0.5 rounded-full bg-indigo-500/15 border border-indigo-400/30 text-indigo-300 font-semibold">
-                  {t.service}
-                </span>
-
-                {t.metric && (
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-400/30 text-emerald-300 font-semibold flex items-center gap-1">
-                    <TrendingUp className="w-3 h-3 text-emerald-400" />
-                    {t.metric}
-                  </span>
-                )}
-              </div>
-
-              {/* Star Rating & Quote Mark */}
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-1">
-                  {[...Array(t.rating)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className="w-4 h-4 fill-amber-400 text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.5)]"
-                    />
-                  ))}
+      {/* Reviews Grid */}
+      {displayedReviews.length === 0 ? (
+        <div className="rounded-3xl bg-[#090d18] border border-white/[0.08] p-12 text-center max-w-xl mx-auto space-y-4 relative z-10">
+          <Quote className="w-10 h-10 text-slate-600 mx-auto" />
+          <h4 className="text-lg font-bold text-white">No Client Reviews Yet</h4>
+          <p className="text-sm text-slate-400">
+            Be the first partner to share your experience working with Silver Pixel Soft.
+          </p>
+          <div className="pt-2">
+            <button
+              onClick={() => navigate("/user/review", { state: { write: true } })}
+              className="px-6 py-2.5 rounded-full bg-gradient-to-r from-indigo-500 to-cyan-500 text-white text-xs font-semibold hover:opacity-90 transition-opacity cursor-pointer inline-flex items-center gap-2"
+            >
+              <PlusCircle className="w-3.5 h-3.5" />
+              <span>Write the First Review</span>
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="grid md:grid-cols-3 gap-8 relative z-10">
+          {displayedReviews.map((t, index) => (
+            <div
+              key={t.id || index}
+              ref={(el) => {
+                if (el) cardsRef.current[index] = el;
+              }}
+              className={`group relative rounded-3xl bg-[#090d18] border p-8 flex flex-col justify-between hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 ${
+                t.isNew
+                  ? "border-cyan-400/50 shadow-[0_0_20px_rgba(34,211,238,0.15)]"
+                  : "border-white/[0.08] hover:border-sky-500/40"
+              }`}
+            >
+              {/* If New Client Review */}
+              {t.isNew && (
+                <div className="absolute -top-3 right-6 bg-gradient-to-r from-indigo-500 to-cyan-400 text-white text-[9px] font-mono font-extrabold uppercase px-2.5 py-0.5 rounded-full shadow-md">
+                  RECENT REVIEW
                 </div>
-                <Quote className="w-6 h-6 text-white/10 group-hover:text-sky-400/30 transition-colors" />
-              </div>
-
-              {/* Headline if available */}
-              {t.title && (
-                <h5 className="text-sm font-bold text-white mb-2 leading-snug group-hover:text-sky-200 transition-colors">
-                  {t.title}
-                </h5>
               )}
 
-              {/* Quote Text */}
-              <p className="text-sm text-neutral-300 leading-relaxed mb-8 italic">
-                "{t.quote}"
-              </p>
-            </div>
+              <div>
+                {/* Category pill & Metric badge */}
+                <div className="flex items-center justify-between gap-2 mb-5">
+                  <span className="text-[11px] font-mono px-3 py-0.5 rounded-full bg-indigo-500/15 border border-indigo-400/30 text-indigo-300 font-semibold">
+                    {t.service}
+                  </span>
 
-            {/* Author Profile */}
-            <div className="pt-6 border-t border-white/[0.06] flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <img
-                  src={t.avatar}
-                  alt={t.author}
-                  className="w-11 h-11 rounded-full object-cover border border-white/10"
-                />
-                <div>
-                  <div className="flex items-center gap-1.5">
-                    <h6 className="text-sm font-bold text-white group-hover:text-sky-300 transition-colors">
-                      {t.author}
-                    </h6>
-                    {t.verified && (
-                      <span title="Verified Client" className="inline-flex">
-                        <ShieldCheck className="w-3.5 h-3.5 text-sky-400" />
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-xs text-neutral-400">
-                    {t.role} •{" "}
-                    <span className="text-slate-300 font-medium">
-                      {t.company}
+                  {t.metric && (
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-400/30 text-emerald-300 font-semibold flex items-center gap-1">
+                      <TrendingUp className="w-3 h-3 text-emerald-400" />
+                      {t.metric}
                     </span>
-                  </p>
+                  )}
+                </div>
+
+                {/* Star Rating & Quote Mark */}
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-1">
+                    {[...Array(t.rating)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className="w-4 h-4 fill-amber-400 text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.5)]"
+                      />
+                    ))}
+                  </div>
+                  <Quote className="w-6 h-6 text-white/10 group-hover:text-sky-400/30 transition-colors" />
+                </div>
+
+                {/* Headline if available */}
+                {t.title && (
+                  <h5 className="text-sm font-bold text-white mb-2 leading-snug group-hover:text-sky-200 transition-colors">
+                    {t.title}
+                  </h5>
+                )}
+
+                {/* Quote Text */}
+                <p className="text-sm text-neutral-300 leading-relaxed mb-8 italic">
+                  "{t.quote}"
+                </p>
+              </div>
+
+              {/* Author Profile */}
+              <div className="pt-6 border-t border-white/[0.06] flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <img
+                    src={t.avatar}
+                    alt={t.author}
+                    className="w-11 h-11 rounded-full object-cover border border-white/10"
+                  />
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <h6 className="text-sm font-bold text-white group-hover:text-sky-300 transition-colors">
+                        {t.author}
+                      </h6>
+                      {t.verified && (
+                        <span title="Verified Client" className="inline-flex">
+                          <ShieldCheck className="w-3.5 h-3.5 text-sky-400" />
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xs text-neutral-400">
+                      {t.role} •{" "}
+                      <span className="text-slate-300 font-medium">
+                        {t.company}
+                      </span>
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
       {/* Review Actions: Explore Wall of Love & Write Review */}
       <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4 relative z-10">
@@ -195,7 +209,7 @@ const Testimonials = () => {
         </div>
         <div className="flex items-center gap-2 text-neutral-300 text-xs sm:text-sm font-medium">
           <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
-          <span>4.9 / 5.0 Average Client Score ({reviewsList.length}+ Reviews)</span>
+          <span>4.9 / 5.0 Average Client Score ({allReviews.length}+ Reviews)</span>
         </div>
         <div className="flex items-center gap-2 text-neutral-300 text-xs sm:text-sm font-medium">
           <CheckCircle className="w-5 h-5 text-emerald-400" />

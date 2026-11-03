@@ -27,22 +27,56 @@ const writeReview = asyncHandler(async (req: Request, res: Response) => {
       review_heading,
       review_,
       tags_,
-      tags
+      tags,
+      // Field aliases from frontend
+      rating,
+      author,
+      company,
+      title,
+      quote,
+      service,
+      metric,
+      clientUrl,
+      communication,
+      speed,
+      quality,
+      value,
+      subRatings,
     } = req.body;
 
+    const resolvedOverallRating = overallReating ?? rating;
+    const resolvedFullname = fullname ?? author;
+    const resolvedRole = role;
+    const resolvedProject = project ?? company;
+    const resolvedEmail = email;
+    const resolvedAvatar = avatar;
+    const resolvedService = service_caterogyrvice ?? service;
+    const resolvedHeading = review_heading ?? title;
+    const resolvedReview = review_ ?? quote;
     const rawTagsInput = tags_ || tags;
+
+    // Sub-ratings with defaults
+    const resolvedComm = communication_transperincy ?? communication ?? subRatings?.communication ?? 5;
+    const resolvedSpeed = turnaround_speed ?? speed ?? subRatings?.speed ?? 5;
+    const resolvedQuality = code_system_qualiy ?? quality ?? subRatings?.quality ?? 5;
+    const resolvedValue = value_of_money ?? value ?? subRatings?.value ?? 5;
+
+    // Optional fields
+    const resolvedProductLink = product_link ?? clientUrl ?? "";
+    const resolvedOutcome = outcome ?? metric ?? "";
 
     // Validating compulsory fields
     if (
-      !overallReating ||
-      !fullname ||
-      !role ||
-      !project ||
-      !email ||
-      !avatar ||
-      !service_caterogyrvice ||
-      !review_ ||
-      !review_heading ||
+      resolvedOverallRating === undefined ||
+      resolvedOverallRating === null ||
+      !resolvedFullname ||
+      !resolvedRole ||
+      !resolvedProject ||
+      !resolvedEmail ||
+      !resolvedAvatar ||
+      !resolvedService ||
+      !resolvedReview ||
+      !resolvedHeading ||
       !rawTagsInput
     ) {
       throw new ApiError(400, "Fill the required fields");
@@ -104,21 +138,21 @@ const writeReview = asyncHandler(async (req: Request, res: Response) => {
 
     // Saving review to DB referencing the tag IDs
     const reviewObject = await Review.create({
-      overallReating,
-      communication_transperincy,
-      turnaround_speed,
-      code_system_qualiy,
-      value_of_money,
-      fullname,
-      role,
-      project,
-      email,
-      product_link,
-      avatar,
-      service_caterogyrvice,
-      outcome,
-      review_heading,
-      review_,
+      overallReating: Number(resolvedOverallRating),
+      communication_transperincy: Number(resolvedComm),
+      turnaround_speed: Number(resolvedSpeed),
+      code_system_qualiy: Number(resolvedQuality),
+      value_of_money: Number(resolvedValue),
+      fullname: resolvedFullname,
+      role: resolvedRole,
+      project: resolvedProject,
+      email: resolvedEmail,
+      product_link: resolvedProductLink,
+      avatar: resolvedAvatar,
+      service_caterogyrvice: resolvedService,
+      outcome: resolvedOutcome,
+      review_heading: resolvedHeading,
+      review_: resolvedReview,
       tags_: tagIds
     });
 
@@ -154,7 +188,7 @@ const getAllReview = asyncHandler(async (req: Request, res: Response) => {
   } catch (error: any) {
     throw new ApiError(error?.statusCode || 400, error?.message || "Failed to fetch Reviews");
   }
-})
+});
 
 export {
   writeReview,

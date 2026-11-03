@@ -1,5 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { type AppDispatch, type RootState } from "../../app/Store";
+import {
+  fetchReviews,
+  toggleLikeReview,
+} from "../../features/review/review.slice";
 import {
   ArrowLeft,
   Sparkles,
@@ -8,6 +14,7 @@ import {
   CheckCircle2,
   MessageSquareHeart,
   PlusCircle,
+  Loader2,
 } from "lucide-react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -17,18 +24,18 @@ import { AIAssistant } from "../../components/ui/AIAssistant";
 import { Footer } from "../../components/layouts";
 import { ReviewForm } from "./ReviewForm";
 import { ReviewWall } from "./ReviewWall";
-import {
-  type ReviewItem,
-  getMergedReviews,
-  STORAGE_KEY_REVIEWS,
-  STORAGE_KEY_LIKES,
-} from "./reviewData";
+import { type ReviewItem } from "./reviewData";
 
 const Review: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const containerRef = useRef<HTMLDivElement>(null);
   const heroRef = useRef<HTMLDivElement>(null);
+
+  const dispatch = useDispatch<AppDispatch>();
+  const { reviews, isFetching } = useSelector(
+    (state: RootState) => state.review
+  );
 
   // Active view: 'wall' | 'write' (detect location.state or query param)
   const [activeView, setActiveView] = useState<"wall" | "write">(() => {
@@ -46,18 +53,10 @@ const Review: React.FC = () => {
     return "wall";
   });
 
-  // Reviews State
-  const [reviews, setReviews] = useState<ReviewItem[]>(() => getMergedReviews());
-
-  // Upvoted review tracking
-  const [likedReviews, setLikedReviews] = useState<string[]>(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY_LIKES);
-      return stored ? JSON.parse(stored) : [];
-    } catch {
-      return [];
-    }
-  });
+  // Fetch reviews via Redux on component mount
+  useEffect(() => {
+    dispatch(fetchReviews());
+  }, [dispatch]);
 
   // Lenis smooth scroll initialization
   useEffect(() => {
@@ -101,48 +100,20 @@ const Review: React.FC = () => {
     { scope: containerRef, dependencies: [activeView] }
   );
 
-  // Scroll to top on mount
+  // Scroll to top on view change
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [activeView]);
 
-  // Handle new review submission
-  const handleReviewSubmit = (newReview: ReviewItem) => {
-    setReviews((prev) => {
-      const updated = [newReview, ...prev];
-      try {
-        const stored = localStorage.getItem(STORAGE_KEY_REVIEWS);
-        const userList = stored ? JSON.parse(stored) : [];
-        localStorage.setItem(
-          STORAGE_KEY_REVIEWS,
-          JSON.stringify([newReview, ...userList])
-        );
-      } catch {
-        // ignore
-      }
-      return updated;
-    });
+  // Handle new review submission completed by ReviewForm
+  const handleReviewSubmit = (_newReview: ReviewItem) => {
+    // Review is saved in Redux store directly; switch to wall view
+    setActiveView("wall");
   };
 
-  // Handle upvoting
+  // Handle upvoting through Redux
   const handleLikeReview = (id: string) => {
-    if (likedReviews.includes(id)) {
-      // Unlike
-      const updatedLikes = likedReviews.filter((item) => item !== id);
-      setLikedReviews(updatedLikes);
-      localStorage.setItem(STORAGE_KEY_LIKES, JSON.stringify(updatedLikes));
-      setReviews((prev) =>
-        prev.map((r) => (r.id === id ? { ...r, likes: Math.max(0, r.likes - 1) } : r))
-      );
-    } else {
-      // Like
-      const updatedLikes = [...likedReviews, id];
-      setLikedReviews(updatedLikes);
-      localStorage.setItem(STORAGE_KEY_LIKES, JSON.stringify(updatedLikes));
-      setReviews((prev) =>
-        prev.map((r) => (r.id === id ? { ...r, likes: r.likes + 1 } : r))
-      );
-    }
+    dispatch(toggleLikeReview(id));
   };
 
   return (
@@ -271,11 +242,19 @@ const Review: React.FC = () => {
 
         {/* ================= CONDITIONAL CONTENT VIEWS ================= */}
         {activeView === "wall" ? (
-          <ReviewWall
-            reviews={reviews}
-            onLikeReview={handleLikeReview}
-            onNavigateToWrite={() => setActiveView("write")}
-          />
+          <div>
+            {isFetching && (
+              <div className="flex items-center justify-center gap-2 py-4 mb-4 text-xs font-mono text-indigo-400 animate-pulse">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                <span>Syncing latest reviews with live database...</span>
+              </div>
+            )}
+            <ReviewWall
+              reviews={reviews}
+              onLikeReview={handleLikeReview}
+              onNavigateToWrite={() => setActiveView("write")}
+            />
+          </div>
         ) : (
           <ReviewForm
             onReviewSubmit={handleReviewSubmit}

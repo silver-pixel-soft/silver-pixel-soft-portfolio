@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { type AppDispatch, type RootState } from "../../app/Store";
+import { postReview, type CreateReviewPayload } from "../../features/review/review.slice";
 import {
   Star,
   Sparkles,
@@ -32,6 +35,9 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
   onReviewSubmit,
   onViewWall,
 }) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { isPosting, postError } = useSelector((state: RootState) => state.review);
+
   // Form State
   const [author, setAuthor] = useState("");
   const [role, setRole] = useState("");
@@ -98,59 +104,61 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
     if (!author.trim()) newErrors.author = "Please enter your full name";
     if (!company.trim()) newErrors.company = "Please enter your company or project name";
     if (!role.trim()) newErrors.role = "Please enter your role or title";
+    if (!email.trim()) {
+      newErrors.email = "Please enter your work email";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      newErrors.email = "Please enter a valid email address";
+    }
     if (!title.trim()) newErrors.title = "Please provide a headline for your review";
     if (!quote.trim()) {
       newErrors.quote = "Please share your experience (min 20 characters)";
     } else if (quote.trim().length < 20) {
       newErrors.quote = "Feedback must be at least 20 characters long";
     }
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      newErrors.email = "Please enter a valid email address";
-    }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
 
     setIsSubmitting(true);
-
     const activeAvatar = customAvatar.trim() || avatar;
 
-    const newReview: ReviewItem = {
-      id: `rev-client-${Date.now()}`,
-      author: author.trim(),
+    const payload: CreateReviewPayload = {
+      overallReating: rating,
+      communication_transperincy: communication,
+      turnaround_speed: speed,
+      code_system_qualiy: quality,
+      value_of_money: value,
+      fullname: author.trim(),
       role: role.trim(),
-      company: company.trim(),
+      project: company.trim(),
+      email: email.trim(),
+      product_link: clientUrl.trim() || undefined,
       avatar: activeAvatar,
-      rating,
-      subRatings: {
-        communication,
-        speed,
-        quality,
-        value,
-      },
-      title: title.trim(),
-      quote: quote.trim(),
-      service,
-      tags: selectedTags.length > 0 ? selectedTags : ["Client Review"],
-      metric: metric.trim() || undefined,
-      date: "Just now",
-      verified: true,
-      isNew: true,
-      likes: 1,
-      clientUrl: clientUrl.trim() || undefined,
+      service_caterogyrvice: service,
+      outcome: metric.trim() || undefined,
+      review_heading: title.trim(),
+      review_: quote.trim(),
+      tags_: selectedTags.length > 0 ? selectedTags : ["Client Review"],
     };
 
-    setTimeout(() => {
-      onReviewSubmit(newReview);
-      setSubmittedReview(newReview);
-      setIsSubmitting(false);
+    try {
+      const createdReview = await dispatch(postReview(payload)).unwrap();
+      onReviewSubmit(createdReview);
+      setSubmittedReview(createdReview);
       setShowSuccessModal(true);
-    }, 600);
+    } catch (err: any) {
+      setErrors((prev) => ({
+        ...prev,
+        server: typeof err === "string" ? err : "Failed to submit review. Please try again.",
+      }));
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleReset = () => {
@@ -668,6 +676,14 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
               </label>
             </div>
 
+            {/* Server Error Alert */}
+            {(errors.server || postError) && (
+              <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2.5">
+                <span className="font-semibold text-rose-400">Error:</span>
+                <span>{errors.server || postError}</span>
+              </div>
+            )}
+
             {/* Form Action Buttons */}
             <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
               <button
@@ -691,10 +707,10 @@ export const ReviewForm: React.FC<ReviewFormProps> = ({
 
                 <button
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || isPosting}
                   className="flex-1 sm:flex-none px-8 py-3 rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-cyan-500 text-white font-semibold text-sm shadow-[0_0_24px_rgba(99,102,241,0.5)] hover:shadow-[0_0_36px_rgba(99,102,241,0.7)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
                 >
-                  {isSubmitting ? (
+                  {isSubmitting || isPosting ? (
                     <div className="flex items-center gap-2">
                       <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                       <span>Submitting...</span>
