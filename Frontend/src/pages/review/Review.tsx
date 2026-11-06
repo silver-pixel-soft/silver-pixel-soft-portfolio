@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { type AppDispatch, type RootState } from "../../app/Store";
@@ -57,6 +57,13 @@ const Review: React.FC = () => {
   useEffect(() => {
     dispatch(fetchReviews());
   }, [dispatch]);
+
+  // Calculate dynamic average score from reviews
+  const averageRating = useMemo(() => {
+    if (!reviews || reviews.length === 0) return "5.0";
+    const sum = reviews.reduce((acc, r) => acc + (Number(r.rating) || 5), 0);
+    return (sum / reviews.length).toFixed(1);
+  }, [reviews]);
 
   // Lenis smooth scroll initialization
   useEffect(() => {
@@ -129,12 +136,12 @@ const Review: React.FC = () => {
 
       {/* ================= TOP NAVIGATION BAR ================= */}
       <header className="fixed top-0 left-0 right-0 z-40 bg-[#030712]/80 backdrop-blur-xl border-b border-white/[0.08]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-20 h-20 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-20 h-20 flex items-center justify-between gap-4 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           {/* Left: Back & Logo */}
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4 sm:gap-6 shrink-0">
             <button
               onClick={() => navigate("/")}
-              className="flex items-center gap-2 text-xs font-semibold text-slate-300 hover:text-white group px-3 py-1.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 transition-all cursor-pointer"
+              className="flex items-center gap-2 text-xs font-semibold text-slate-300 hover:text-white group px-3 py-1.5 rounded-full bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 transition-all cursor-pointer shrink-0"
             >
               <ArrowLeft className="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" />
               <span>Back to Home</span>
@@ -142,7 +149,7 @@ const Review: React.FC = () => {
 
             <div
               onClick={() => navigate("/")}
-              className="hidden sm:flex items-center gap-3 cursor-pointer group"
+              className="hidden sm:flex items-center gap-3 cursor-pointer group shrink-0"
             >
               <div className="relative flex h-8 w-8 items-center justify-center">
                 <div className="absolute inset-0 bg-sky-500/20 rounded-full blur-sm opacity-60 group-hover:opacity-100 transition-opacity" />
@@ -164,11 +171,11 @@ const Review: React.FC = () => {
           </div>
 
           {/* Right: Switch Mode Tabs */}
-          <div className="flex items-center gap-2 bg-[#181c27] p-1.5 rounded-full border border-white/10">
+          <div className="flex items-center gap-2 bg-[#181c27] p-1.5 rounded-full border border-white/10 shrink-0">
             <button
               type="button"
               onClick={() => setActiveView("wall")}
-              className={`px-4 py-1.5 rounded-full text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
+              className={`px-3 sm:px-4 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer shrink-0 ${
                 activeView === "wall"
                   ? "bg-gradient-to-r from-indigo-500 to-cyan-500 text-white shadow-md"
                   : "text-slate-400 hover:text-white"
@@ -185,7 +192,7 @@ const Review: React.FC = () => {
             <button
               type="button"
               onClick={() => setActiveView("write")}
-              className={`px-4 py-1.5 rounded-full text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
+              className={`px-3 sm:px-4 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 sm:gap-2 transition-all cursor-pointer shrink-0 ${
                 activeView === "write"
                   ? "bg-gradient-to-r from-indigo-500 to-cyan-500 text-white shadow-md"
                   : "text-slate-400 hover:text-white"
@@ -225,7 +232,7 @@ const Review: React.FC = () => {
           <div className="flex flex-wrap items-center justify-center gap-3 pt-3">
             <div className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-xs text-slate-300 font-mono">
               <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-              <span>4.9 / 5.0 Average Score</span>
+              <span>{averageRating} / 5.0 Average Score</span>
             </div>
 
             <div className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-xs text-slate-300 font-mono">

@@ -247,10 +247,10 @@ const Header = () => {
         ref={menuRef}
         data-lenis-prevent="true"
         style={{ display: "none", opacity: 0 }}
-        className="fixed top-0 right-0 z-[100] h-screen w-full max-w-[100vw] sm:w-[420px] border-l border-white/10 bg-[#060a12]/95 backdrop-blur-2xl md:hidden flex flex-col shadow-2xl overscroll-contain touch-pan-y"
+        className="fixed top-0 right-0 z-[100] h-[100dvh] w-full max-w-[100vw] sm:w-[420px] border-l border-white/10 bg-[#060a12]/95 backdrop-blur-2xl md:hidden flex flex-col shadow-2xl overflow-hidden"
       >
         {/* Drawer Header */}
-        <div className="flex h-20 items-center justify-between px-8 border-b border-white/5 shrink-0">
+        <div className="flex h-20 items-center justify-between px-6 sm:px-8 border-b border-white/5 shrink-0">
           <div className="flex items-center gap-3">
             <div className="h-9 w-9 rounded-xl bg-white/[0.06] border border-white/10 p-1 flex items-center justify-center overflow-hidden shadow-inner">
               <img src="/SPS.png" alt="Silver Pixel Soft Logo" className="h-full w-full object-contain" />
@@ -262,42 +262,46 @@ const Header = () => {
           </div>
           <button
             aria-label="Close Navigation Menu"
-            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-neutral-300 transition-colors hover:bg-white/10 hover:text-white"
+            className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-neutral-300 transition-colors hover:bg-white/10 hover:text-white cursor-pointer"
             onClick={() => setIsMobileMenuOpen(false)}
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
-        {/* Drawer Links */}
+        {/* Drawer Scrollable Links Container */}
         <div
           data-lenis-prevent="true"
-          className="flex flex-1 flex-col justify-between px-8 py-10 overflow-y-auto overscroll-contain"
+          onWheel={(e) => e.stopPropagation()}
+          onTouchMove={(e) => e.stopPropagation()}
+          className="flex-1 min-h-0 overflow-y-auto overscroll-contain px-6 sm:px-8 py-6 sm:py-8 [webkit-overflow-scrolling:touch]"
         >
-          <ul className="flex flex-col gap-5 text-2xl font-bold tracking-tight text-white">
-            {navItems.map((item) => (
-              <li
-                key={item.id}
-                className="mobile-nav-link group flex items-center justify-between cursor-pointer py-2 border-b border-white/[0.04] transition-colors hover:text-sky-400"
-                onClick={() => handleNavClick(item.id)}
-              >
-                <span>{item.name}</span>
-                <ArrowUpRight className="h-5 w-5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-sky-400" />
-              </li>
-            ))}
-          </ul>
+          <div className="min-h-full flex flex-col justify-between gap-8">
+            <ul className="flex flex-col gap-4 text-xl sm:text-2xl font-bold tracking-tight text-white">
+              {navItems.map((item) => (
+                <li
+                  key={item.id}
+                  className="mobile-nav-link group flex items-center justify-between cursor-pointer py-2.5 border-b border-white/[0.04] transition-colors hover:text-sky-400"
+                  onClick={() => handleNavClick(item.id)}
+                >
+                  <span>{item.name}</span>
+                  <ArrowUpRight className="h-5 w-5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-sky-400" />
+                </li>
+              ))}
+            </ul>
 
-          <div className="mobile-nav-link flex flex-col gap-4 pt-6">
-            <div className="flex items-center gap-2 p-3 rounded-xl bg-white/[0.02] border border-white/[0.06] text-xs text-neutral-400">
-              <span className="h-2 w-2 rounded-full bg-emerald-400"></span>
-              Accepting new projects worldwide
+            <div className="mobile-nav-link flex flex-col gap-4 pt-4 shrink-0">
+              <div className="flex items-center gap-2 p-3 rounded-xl bg-white/[0.02] border border-white/[0.06] text-xs text-neutral-400">
+                <span className="h-2 w-2 rounded-full bg-emerald-400 shrink-0"></span>
+                <span>Accepting new projects worldwide</span>
+              </div>
+              <Button
+                className="w-full text-base py-3.5"
+                onClick={() => handleNavClick("contact")}
+              >
+                Start Project
+              </Button>
             </div>
-            <Button
-              className="w-full text-base py-3.5"
-              onClick={() => handleNavClick("contact")}
-            >
-              Start Project
-            </Button>
           </div>
         </div>
       </div>
